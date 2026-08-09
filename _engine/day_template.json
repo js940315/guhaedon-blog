@@ -1,0 +1,50 @@
+{
+  "_설명": [
+    "하루 발행 선언서. 이 파일 하나가 그날 워드프레스 2세트와 네이버 10건을 정의한다.",
+    "매일 이걸 복사해서 day_MMDD.json 으로 만든다. (운영 매뉴얼 4-A절 확정 구조)",
+    "",
+    "A세트 = 이슈   — 터진 날 안에 들어간다. 늦으면 관점으로만 뚫린다.",
+    "B세트 = 롱테일 — 시즌 한 달 전에 미리 쌓는다. 내년에도 산다.",
+    "",
+    "네이버 10건 배분",
+    "  A: homefeed 2건 (1,000~1,300자 · 이미지 3장) + search 3건 (400~900자 · 썸네일 1장)",
+    "  B: search 5건 (400~900자 · 썸네일 1장)",
+    "",
+    "각 세트의 네이버 글은 그 세트의 메인허브 하나로만 링크한다.",
+    "A 글이 B 허브로 가거나 그 반대가 되면 안 된다 — 신호가 흩어진다.",
+    "",
+    "링크 배치는 홈판·검색 공통이다 (3-1절)",
+    "  맨 위 없음 / 중간 25~35% 이미지 카드 / 최하단 텍스트 링크"
+  ],
+  "date": "MMDD",
+  "sets": {
+    "A": {
+      "kind": "이슈",
+      "topic": "소재명 (예: 따릉이 개인정보 유출 보상)",
+      "set_type": "B",
+      "photo_topic": "topics.json 의 키워드 (예: 따릉이)",
+      "issue_started": "YYYY-MM-DD  이슈가 터진 날. 오늘과 3일 이상 벌어지면 관점으로만 간다",
+      "hub": {
+        "hub": "https://savemoney119.com/...",
+        "check": "https://savemoney119.com/...-check/",
+        "apply": "https://savemoney119.com/...-apply/"
+      },
+      "homefeed": [],
+      "search": []
+    },
+    "B": {
+      "kind": "롱테일",
+      "topic": "소재명 (예: 종합소득세 신고)",
+      "set_type": "A",
+      "photo_topic": "topics.json 의 키워드 (예: 종합소득세)",
+      "season": "5월",
+      "hub": {
+        "hub": "https://savemoney119.com/...",
+        "check": "https://savemoney119.com/...-check/",
+        "apply": "https://savemoney119.com/...-apply/"
+      },
+      "homefeed": [],
+      "search": []
+    }
+  }
+}
