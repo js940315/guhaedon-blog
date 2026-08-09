@@ -34,9 +34,13 @@ REPO = pathlib.Path(__file__).resolve().parent.parent
 BR = "⠀⠀⠀"                      # 점자 빈칸 3개 — 문단 구분
 URL_SLOT = "【여기에 허브 URL 단독 입력 + 엔터 → 이미지 카드】"
 
-MIN_CHARS, MAX_CHARS = 1400, 1600
+# 분량·장수는 데이터에서 읽는다. 아직 실측으로 확정된 값이 아니라 트랙마다 다르게 간다.
+#   economy-blog 홈판 스펙은 1,400~1,600자지만 그건 뉴스 소재 · 하루 소수 발행 기준이다.
+#   구해돈은 같은 소재로 10건을 뿌리므로 길수록 유사문서 표면적이 커진다.
+#   게다가 링크를 26% 지점에 두는 설계와 긴 본문은 서로 싸운다.
+#   → 기본을 1,000~1,300 으로 낮춰 잡고, 발행 결과를 보고 조정한다.
+DEFAULT_CHARS = (1000, 1300)
 TAGS_PER_POST = 8
-IMAGES_PER_POST = 5
 MAX_SENT = 60                                  # 한 문장 60자
 
 MARKER_RE = re.compile(r"【\s*\d+\s*번\s*사진\s*】")
@@ -46,7 +50,7 @@ SKIP_PREFIX = ("http", "👉", "💡", "📌", "📝", "※", "#", "【", "⠀")
 def build_body(d: dict) -> str:
     """플레이스홀더를 실제 마커·링크로 바꾼다."""
     body = d["body"]
-    for i in range(1, IMAGES_PER_POST + 1):
+    for i in range(1, len(d["images"]) + 1):
         body = body.replace(f"{{{{IMG{i}}}}}", f"【{i}번 사진】")
     body = body.replace("{{URL_CARD}}", URL_SLOT)
     body = body.replace("{{URL_TEXT}}", f"{d['cta_text']}\n{d['hub']}")
@@ -56,6 +60,8 @@ def build_body(d: dict) -> str:
 
 def validate(body: str, d: dict) -> list[str]:
     probs: list[str] = []
+    lo, hi = d.get("chars_range", DEFAULT_CHARS)
+    n_img = len(d["images"])
 
     tags = [t for t in body.split() if t.startswith("#")]
     inline = re.findall(r"https?://\S+", body)
@@ -66,8 +72,8 @@ def validate(body: str, d: dict) -> list[str]:
     txt = re.sub(r"【[^】]*】", "", txt)
     txt = re.sub(r"#\S+", "", txt)
     n = len(re.sub(r"\s", "", txt))
-    if not (MIN_CHARS <= n <= MAX_CHARS):
-        probs.append(f"본문 {n}자 — 홈판 규격 {MIN_CHARS:,}~{MAX_CHARS:,}자 벗어남")
+    if not (lo <= n <= hi):
+        probs.append(f"본문 {n}자 — 규격 {lo:,}~{hi:,}자 벗어남")
 
     # 링크 — 본문에 박히는 건 최하단 텍스트 링크 하나뿐. 중간은 자리만 비워둔다.
     if len(inline) != 1:
@@ -87,8 +93,8 @@ def validate(body: str, d: dict) -> list[str]:
     if first < len(body) * 0.25:
         probs.append(f"첫 링크가 글 앞 {first/len(body)*100:.0f}% 지점 — 25% 이후여야 함")
 
-    if len(markers) != IMAGES_PER_POST:
-        probs.append(f"사진 마커 {len(markers)}개 — {IMAGES_PER_POST}개여야 함")
+    if len(markers) != n_img:
+        probs.append(f"사진 마커 {len(markers)}개 — {n_img}개여야 함")
     if body.find("【1번 사진】") > len(body) * 0.1:
         probs.append("1번 사진(대표 썸네일)이 맨 위가 아니다")
     if len(tags) != TAGS_PER_POST:
@@ -109,6 +115,7 @@ def validate(body: str, d: dict) -> list[str]:
 
 
 def render_html(d: dict, body: str, chars: int, probs: list[str]) -> str:
+    n_img = len(d["images"])
     imgs = "".join(
         f"<tr><td><b>{html.escape(i['file'])}</b></td><td>{html.escape(i['kind'])}</td>"
         f"<td>{html.escape(i['where'])}</td><td>{html.escape(i['copy'])}</td></tr>"
@@ -132,7 +139,7 @@ table{{width:100%;border-collapse:collapse;background:#fff;font-size:13px;border
 th,td{{border-bottom:1px solid #eef1f5;padding:9px 12px;text-align:left}} th{{background:#eef1f5}}
 </style>
 <h1>구해돈 · 네이버 홈판 스탠바이</h1>
-<div class="meta">{d['date']} · {html.escape(d['topic'])} · 본문 {chars:,}자 · 사진 5장 · 검증 {ok}</div>
+<div class="meta">{d['date']} · {html.escape(d['topic'])} · 본문 {chars:,}자 · 사진 {n_img}장 · 검증 {ok}</div>
 {f'<div class="bad"><b>검증 실패</b><ul>{plist}</ul></div>' if probs else ''}
 <div class="warn">
 <b>붙여넣는 순서</b><br>
@@ -154,7 +161,7 @@ th,td{{border-bottom:1px solid #eef1f5;padding:9px 12px;text-align:left}} th{{ba
 <button class="sm" onclick="cp(this,'u')">허브 URL 복사</button></div>
 <pre id="b">{html.escape(body)}</pre>
 <div style="display:none" id="u">{html.escape(d['hub'])}</div>
-<h2>사진 5장</h2>
+<h2>사진 {n_img}장</h2>
 <table><tr><th>파일</th><th>종류</th><th>들어가는 자리</th><th>카피</th></tr>{imgs}</table>
 <script>
 const b=document.getElementById('b');
@@ -190,7 +197,7 @@ def main() -> None:
     card_at = body.find(URL_SLOT) / len(body) * 100
     link = re.findall(r"https?://\S+", body)
     text_at = body.find(link[0]) / len(body) * 100 if link else 0
-    print(f"본문 {chars:,}자 · 사진 5장 · 태그 8개")
+    print(f"본문 {chars:,}자 · 사진 {len(d['images'])}장 · 태그 {TAGS_PER_POST}개")
     print(f"중간 이미지 카드  {card_at:4.0f}% 지점")
     print(f"최하단 텍스트 링크 {text_at:4.0f}% 지점")
     print("문제 " + (f"{len(probs)}건" if probs else "0건"))
