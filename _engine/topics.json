@@ -18,7 +18,9 @@
     "   1) document·form·paperwork → 미국 세금서식(Form 1040)이 잔뜩 나온다.",
     "   2) money·cash·banknote     → 달러·외국 지폐가 나온다. 한국 세금 글에 달러는 안 맞는다.",
     "   대신 국적이 안 드러나는 사물 클로즈업을 노린다:",
-    "   계산기 · 동전 · 영수증 · 열쇠 · 저금통 · 청진기 · 장바구니."
+    "   계산기 · 동전 · 영수증 · 열쇠 · 저금통 · 청진기 · 장바구니.",
+    "logo_query — 로고 검색어. 생략하면 verify[0] 을 쓴다. 단순 워드마크는 대개 PD 다.",
+    "⚠️ 화면·앱·screen 검색어 금지 — 폰 화면에 타 브랜드 로고가 찍혀 나온다 (테무 배경에 Alipay 가 박혀 나온 실측). 로고가 안 찍히는 물건 위주로 검색한다."
   ],
   "version": 2,
   "topics": {
@@ -37,7 +39,8 @@
       "card": [
         "따릉이",
         "bicycle sharing station"
-      ]
+      ],
+      "logo_query": "Seoul Bike"
     },
     "쿠팡 개인정보 유출": {
       "slug": "coupang_leak",
@@ -50,7 +53,7 @@
       "thumb": [
         "Coupang",
         "쿠팡",
-        "smartphone alert close up"
+        "cardboard parcel close up"
       ],
       "card": [
         "Coupang",
@@ -68,7 +71,7 @@
       "thumb": [
         "Coupang",
         "쿠팡",
-        "smartphone screen in hand close up"
+        "package box close up"
       ],
       "card": [
         "Coupang",
@@ -81,21 +84,25 @@
       "season": "긴급",
       "_주의": "위키미디어에 테무 실물이 없다. '테무'/'Temu' 는 이탈리아 Temù 마을과 겹쳐 오매칭된다. 상황 컷으로만 간다.",
       "thumb": [
-        "shopping app on smartphone close up",
-        "smartphone in hand close up"
+        "cardboard parcel close up",
+        "package box close up"
       ],
       "card": [
-        "online shopping parcels",
-        "cardboard boxes delivery"
-      ]
+        "stacked cardboard boxes",
+        "parcel on doorstep"
+      ],
+      "verify": [
+        "Temu"
+      ],
+      "logo_query": "Temu"
     },
     "모두의카드": {
       "slug": "moduui_card",
       "kind": "제도",
       "season": "이슈",
       "thumb": [
-        "credit card close up",
-        "payment card in hand close up"
+        "blank credit card close up",
+        "card in hand close up"
       ],
       "card": [
         "card payment terminal shop",

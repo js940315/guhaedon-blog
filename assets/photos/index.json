@@ -140,5 +140,67 @@
     "credit": "사진 : Esquisse de la Baie de Coupang (Côte S. O. Î / Public domain / Wikimedia Commons",
     "source": "wikimedia",
     "query": "Coupang"
+  },
+  "temu_leak_thumb_0.jpg": {
+    "topic": "테무 개인정보 유출",
+    "role": "thumb",
+    "credit": "RDNE Stock project / Pexels",
+    "source": "stock",
+    "query": "cardboard parcel close up"
+  },
+  "temu_leak_thumb_1.jpg": {
+    "topic": "테무 개인정보 유출",
+    "role": "thumb",
+    "credit": "Jon Moore / Unsplash",
+    "source": "stock",
+    "query": "cardboard parcel close up"
+  },
+  "temu_leak_thumb_2.jpg": {
+    "topic": "테무 개인정보 유출",
+    "role": "thumb",
+    "credit": "https://kaboompics.com/ / Pexels",
+    "source": "stock",
+    "query": "cardboard parcel close up"
+  },
+  "temu_leak_thumb_3.jpg": {
+    "topic": "테무 개인정보 유출",
+    "role": "thumb",
+    "credit": "Paper Textures / Unsplash",
+    "source": "stock",
+    "query": "cardboard parcel close up"
+  },
+  "temu_leak_card_0.jpg": {
+    "topic": "테무 개인정보 유출",
+    "role": "card",
+    "credit": "Ihsan Adityawarman / Pexels",
+    "source": "stock",
+    "query": "stacked cardboard boxes"
+  },
+  "temu_leak_card_1.jpg": {
+    "topic": "테무 개인정보 유출",
+    "role": "card",
+    "credit": "Donna Brown / Unsplash",
+    "source": "stock",
+    "query": "stacked cardboard boxes"
+  },
+  "temu_leak_card_2.jpg": {
+    "topic": "테무 개인정보 유출",
+    "role": "card",
+    "credit": "https://kaboompics.com/ / Pexels",
+    "source": "stock",
+    "query": "stacked cardboard boxes"
+  },
+  "temu_leak_card_3.jpg": {
+    "topic": "테무 개인정보 유출",
+    "role": "card",
+    "credit": "Donna Brown / Unsplash",
+    "source": "stock",
+    "query": "stacked cardboard boxes"
+  },
+  "temu_leak_logo.png": {
+    "role": "logo",
+    "credit": "File:Temu logo.svg / Public domain",
+    "source": "wikimedia",
+    "query": "Temu logo"
   }
 }

@@ -139,6 +139,54 @@ def gather(queries: list[str], tmp: pathlib.Path, tag: str,
     return out
 
 
+def fetch_logo(brand_en: str, slug: str, tmp: pathlib.Path,
+               verify: list[str]) -> str | None:
+    """공식 로고를 확보한다 — 브랜드 인지도를 만드는 가장 확실한 요소.
+
+    구글 이미지에 뜨는 로고는 대부분 나무위키·언론사가 재가공한 것이라 그대로 못 쓴다.
+    그런데 **단순 워드마크는 창작성 기준 미달로 Wikimedia 에 Public domain 으로 올라와 있다.**
+    실측(2026-08-10)에서 아래가 전부 PD/CC0 였다:
+        Coupang logo.svg · Temu logo.svg · SK Hynix.svg
+        Samsung Electronics logo (hangul).svg · Bitcoin logo clean.svg
+    긁을 이유가 없다. 여기서 정식으로 받아 `build_thumbnail_svg(logo_path=...)` 에 넘긴다.
+
+    ⚠️ 여기도 오매칭이 심하다. 'Temu logo' 검색에 인도네시아 학교 로고가 섞여 나온다.
+       그래서 파일명에 브랜드명이 실제로 들어있는 것만 채택한다.
+    """
+    try:
+        rep = isrc.logo_candidates(brand_en, str(tmp), width=1200, limit=8,
+                                   prefix=f"{slug}_logo")
+    except Exception as e:
+        print(f"    [로고] 실패 {type(e).__name__}: {e}")
+        return None
+
+    best = None
+    for c in rep or []:
+        if not c.get("path"):
+            continue
+        title, lic = c.get("title", ""), str(c.get("license", ""))
+        if not any(v.lower() in title.lower() for v in verify):
+            continue                                   # 남의 로고를 걸러낸다
+        if not license_ok(lic):
+            continue
+        # 가로로 긴 워드마크가 썸네일에 얹기 좋다. 큰 것을 고른다.
+        if best is None or (c.get("w") or 0) > (best.get("w") or 0):
+            best = c
+
+    if not best:
+        print("    [로고] 채택 0건 — 로고 없이 간다")
+        return None
+
+    dst = PHOTO_DIR / f"{slug}_logo.png"
+    shutil.copy2(best["path"], dst)
+    idx = _load(INDEX, {})
+    idx[dst.name] = {"role": "logo", "credit": f"{best['title']} / {best.get('license')}",
+                     "source": "wikimedia", "query": f"{brand_en} logo"}
+    _save_index(idx)
+    print(f"    [로고] {best['title'][:44]}  {best.get('w')}x{best.get('h')}  {best.get('license')}")
+    return str(dst)
+
+
 def contact_sheet(files: list[pathlib.Path], out_path: pathlib.Path) -> None:
     """육안검수용 몽타주. 아래 줄은 120px 실제 썸네일 크기로 같이 깐다.
 
@@ -189,6 +237,13 @@ def run_topic(name: str, spec: dict, tmp_root: pathlib.Path) -> dict:
         print(f"  [{role}] 채택 {n}건")
 
     _save_index(idx)
+
+    # 브랜드 소재는 로고를 같이 확보한다. 배경 사진이 애매해도 로고 하나로 판정이 된다.
+    if spec.get("verify"):
+        print("  [로고]")
+        fetch_logo(spec.get("logo_query") or spec["verify"][0], slug,
+                   tmp_root / f"{slug}_logo", spec["verify"])
+
     if saved_all:
         sheet = PHOTO_DIR / f"_검수_{slug}.jpg"
         contact_sheet(saved_all, sheet)

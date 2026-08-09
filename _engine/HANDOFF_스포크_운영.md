@@ -196,10 +196,45 @@ python _engine/source_photo.py --adhoc "OO 유출" --slug oo --thumb "..." --car
 |---|---|
 | `document` `form` `paperwork` | 미국 세금서식(Form 1040) |
 | `money` `cash` `banknote` | 달러·외국 지폐 |
+| `screen` `app` `smartphone` | **폰 화면에 찍힌 남의 브랜드 로고** |
 
-한국 세금 글에 1040 서식이나 달러가 깔리면 그 순간 이질감이 생긴다.
-대신 **국적이 안 드러나는 사물 클로즈업**을 노린다 —
-계산기 · 동전 · 영수증 · 열쇠 · 저금통 · 청진기 · 장바구니.
+앞의 둘은 "외국 티"가 나서 이질감을 만든다. 한국 세금 글에 1040 서식이나 달러가 깔리면 끝이다.
+세 번째는 더 위험하다 — 테무 썸네일 배경에 **Alipay 로고가 박힌 폰 화면**이 잡혀 나왔다.
+경쟁 브랜드가 우리 썸네일에 들어가는 셈이다.
+
+대신 **국적도 브랜드도 안 드러나는 사물 클로즈업**을 노린다 —
+계산기 · 동전 · 영수증 · 열쇠 · 저금통 · 청진기 · 장바구니 · 택배상자.
+
+**④ 로고는 긁지 말고 정식으로 받는다 — 대부분 Public domain 이다**
+
+구글 이미지에 뜨는 로고는 나무위키·언론사가 재가공한 것이라 그대로 못 쓴다.
+그런데 **단순 워드마크는 창작성 기준 미달이라 Wikimedia 에 PD 로 올라와 있다.**
+실측(2026-08-10)에서 전부 PD/CC0 였다:
+
+```
+File:Coupang logo.svg                        1280x291   Public domain
+File:Temu logo.svg                           1280x309   Public domain
+File:Samsung Electronics logo (hangul).svg   1280x466   Public domain
+File:SK Hynix.svg                            1280x677   Public domain
+File:Bitcoin logo clean.svg                  1280x272   CC0
+```
+
+`source_photo.py` 가 `verify` 있는 소재에서 자동으로 받아 `{slug}_logo.png` 로 저장한다.
+렌더할 때 넘기면 좌상단에 얹힌다.
+
+```python
+cu.build_thumbnail_svg(..., logo_path="assets/photos/temu_leak_logo.png")
+```
+
+**이게 브랜드 인지도를 만드는 가장 확실한 수단이다.** 배경 사진이 다소 밋밋해도
+로고 하나가 박히면 "내 얘긴지" 판정이 즉시 된다(홈판 가이드 5절의 고유명사 조건 충족).
+
+> 로고 검색도 오매칭이 심하다. `Temu logo` 에 인도네시아 학교 로고가 섞여 나온다.
+> 파일명에 브랜드명이 실제로 들어있는 것만 채택하도록 걸러둔다.
+> 검색어가 다르면 `topics.json` 의 `logo_query` 로 지정한다 (따릉이 → `Seoul Bike`).
+
+**구글 이미지의 올바른 용도**: "어떤 그림이 맞는지" 파악하는 **참고용**이다.
+거기 뜬 파일을 내려받아 쓰는 게 아니라, 보고 나서 **같은 물건을 PD·CC 소스에서 구한다.**
 
 **③ 자동 필터로는 끝까지 못 간다 — 육안검수가 마지막 관문이다**
 
