@@ -19,7 +19,9 @@ h1{font-size:21px;margin:0 0 6px}
 .ok{color:var(--ac)} .bad{color:#ff7a7a}
 textarea{width:100%;height:250px;background:#0d1017;color:#d7dbe6;border:1px solid var(--line);
 border-radius:8px;padding:12px;font-family:inherit;font-size:13px;line-height:1.75;resize:vertical;white-space:pre-wrap}
-textarea.t{height:44px}
+textarea.t{height:44px} textarea.s{height:110px}
+.step{margin:14px 0 6px;font-size:12px;font-weight:700;color:var(--ac)}
+.step em{font-style:normal;font-weight:400;color:var(--mut);margin-left:6px}
 .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
 button{background:var(--ac);color:#0f1116;border:0;border-radius:8px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}
 button.g{background:#242a36;color:#c3c9d8}
@@ -27,19 +29,21 @@ button.g{background:#242a36;color:#c3c9d8}
 <h1>네이버 스탠바이 10건 · 따릉이 개인정보 유출 보상</h1>
 <div class="sub">0809 세트 · B형 배분 · 전부 savemoney119 허브로 유입</div>
 <div class="guide">
-<b>쓰는 법</b> — 제목 복사 → 네이버 글쓰기 제목칸 / 본문 복사 → 본문칸 그대로 붙여넣기.<br>
+<b>쓰는 법</b> — 글 1개당 복사 버튼 4개를 <b>1 → 2 → 3 → 4 순서</b>로 누릅니다.<br>
 문단 간격은 점자 빈칸(U+2800)이라 붙여넣어도 살아남습니다. 지우지 마세요.<br>
 <b>표 3줄</b>은 그대로 둬도 되고, 네이버 표 도구로 3행 2열에 옮기면 더 좋습니다.<br>
 <b>발행 간격</b> — 한 번에 올리지 말고 하루에 걸쳐 60~90분 간격으로 흩어서.<br>
-<b>링크 규칙</b> — 글당 정확히 2개(중간 허브 1 · 마지막 스포크 1). 늘리지 마세요.
+<b>링크 규칙</b> — 글당 정확히 2회, 둘 다 <b>메인허브 하나로만</b>. 스포크는 허브의 CTA가 보낸다.<br>복사 버튼을 <b>1→2→3→4 순서대로</b> 누릅니다. 3번 URL은 붙여넣고 엔터를 쳐야 카드가 뜬다.
 </div>
 <div class="card">
 <div class="head"><span class="no">1</span><span class="ty">상황·문제형</span>
 <span class="ti">따릉이 30일 정기권 쿠폰 언제 들어오나요 (8월 지급)</span></div>
-<div class="meta">701자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t1" readonly>따릉이 30일 정기권 쿠폰 언제 들어오나요 (8월 지급)</textarea>
+<div class="meta">700자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t1" readonly>따릉이 30일 정기권 쿠폰 언제 들어오나요 (8월 지급)</textarea>
 <div class="row"><button id="b_t1" onclick="cp('t1')">제목 복사</button></div>
-<textarea id="c1" readonly>따릉이 개인정보 유출 보상 쿠폰은 따로 신청하지 않아도 됩니다. 서울시설공단은 30일 정기권을 8월 중 따릉이 앱으로 일괄 지급한다고 밝혔습니다.
+
+<div class="step">2</div><textarea id="c1" readonly>따릉이 개인정보 유출 보상 쿠폰은 따로 신청하지 않아도 됩니다. 서울시설공단은 30일 정기권을 8월 중 따릉이 앱으로 일괄 지급한다고 밝혔습니다.
 ⠀⠀⠀
 지급 시기 : 8월 중 (정확한 날짜는 미공개)
 신청 여부 : 별도 신청 없음, 앱으로 자동 지급
@@ -64,24 +68,30 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 8월이 지나도 앱에 아무것도 들어오지 않으면 그때 공단에 직접 문의하시면 됩니다.
 ⠀⠀⠀
-👉 대상자 확인 6단계 전체 보기
-https://savemoney119.com/ttareungi-privacy-leak-compensation-check/
-⠀⠀⠀
-여러분 앱 이용권 함에는 정기권이 들어와 있던가요?
+👉 대상 여부와 지급 일정 한 번에 보기</textarea>
+<div class="row"><button id="b_c1" onclick="cp('c1')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u1" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u1" onclick="cp('u1')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d1" readonly>여러분 앱 이용권 함에는 정기권이 들어와 있던가요?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #따릉이정기권 #따릉이보상 #따릉이개인정보유출 #서울시설공단 #개인정보유출 #30일정기권 #따릉이앱</textarea>
-<div class="row"><button id="b_c1" onclick="cp('c1')">본문 복사</button>
+<div class="row"><button id="b_d1" onclick="cp('d1')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <div class="card">
 <div class="head"><span class="no">2</span><span class="ty">상황·문제형</span>
 <span class="ti">따릉이 보상 쿠폰 앱에 안 보여요, 대상이 아닌 걸까요</span></div>
-<div class="meta">721자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t2" readonly>따릉이 보상 쿠폰 앱에 안 보여요, 대상이 아닌 걸까요</textarea>
+<div class="meta">719자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t2" readonly>따릉이 보상 쿠폰 앱에 안 보여요, 대상이 아닌 걸까요</textarea>
 <div class="row"><button id="b_t2" onclick="cp('t2')">제목 복사</button></div>
-<textarea id="c2" readonly>앱을 열었는데 정기권이 없다고 대상이 아니라고 단정하기는 이릅니다. 공단은 8월 중 일괄 지급이라고만 밝혔고 정확한 날짜는 공개하지 않았습니다.
+
+<div class="step">2</div><textarea id="c2" readonly>앱을 열었는데 정기권이 없다고 대상이 아니라고 단정하기는 이릅니다. 공단은 8월 중 일괄 지급이라고만 밝혔고 정확한 날짜는 공개하지 않았습니다.
 ⠀⠀⠀
 확인 위치 : 따릉이 앱 로그인 후 이용권 함
 안 보이는 이유 : 지급 전이거나 통보 누락 가능성
@@ -105,24 +115,30 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 확인이 끝나면 유출 항목과 통보 시점을 캡처해서 남겨두시는 걸 권합니다.
 ⠀⠀⠀
-👉 문자 없어도 확인하는 방법 보기
-https://savemoney119.com/ttareungi-privacy-leak-compensation-check/
-⠀⠀⠀
-문자는 못 받았는데 대상이었던 경우, 주변에도 꽤 있으시죠?
+👉 문자 없이 확인하는 방법까지 정리</textarea>
+<div class="row"><button id="b_c2" onclick="cp('c2')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u2" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u2" onclick="cp('u2')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d2" readonly>문자는 못 받았는데 대상이었던 경우, 주변에도 꽤 있으시죠?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #따릉이보상쿠폰 #따릉이개인정보유출 #따릉이대상자 #서울시설공단 #개인정보유출 #따릉이앱 #정기권지급</textarea>
-<div class="row"><button id="b_c2" onclick="cp('c2')">본문 복사</button>
+<div class="row"><button id="b_d2" onclick="cp('d2')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <div class="card">
 <div class="head"><span class="no">3</span><span class="ty">상황·문제형</span>
 <span class="ti">따릉이 개인정보 유출 문자 진짜인가요, 스미싱 구별법</span></div>
-<div class="meta">728자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t3" readonly>따릉이 개인정보 유출 문자 진짜인가요, 스미싱 구별법</textarea>
+<div class="meta">727자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t3" readonly>따릉이 개인정보 유출 문자 진짜인가요, 스미싱 구별법</textarea>
 <div class="row"><button id="b_t3" onclick="cp('t3')">제목 복사</button></div>
-<textarea id="c3" readonly>지금 따릉이 유출을 사칭한 문자가 실제로 돌고 있습니다. 진짜 안내문자와 사기 문자는 요구하는 것이 다릅니다.
+
+<div class="step">2</div><textarea id="c3" readonly>지금 따릉이 유출을 사칭한 문자가 실제로 돌고 있습니다. 진짜 안내문자와 사기 문자는 요구하는 것이 다릅니다.
 ⠀⠀⠀
 진짜 안내 : 유출 사실과 항목 안내, 요구 사항 없음
 사기 문자 : 링크 클릭, 계좌번호, 신분증 사진 요구
@@ -146,24 +162,30 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 유출된 정보에 연락처와 주소가 포함됐기 때문에 앞으로도 사칭 시도는 계속될 수 있습니다.
 ⠀⠀⠀
-👉 공식 확인 절차 순서대로 보기
-https://savemoney119.com/ttareungi-privacy-leak-compensation-check/
-⠀⠀⠀
-혹시 최근에 비슷한 문자 받아보신 적 있으신가요?
+👉 진짜 안내인지 판별하는 기준 보기</textarea>
+<div class="row"><button id="b_c3" onclick="cp('c3')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u3" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u3" onclick="cp('u3')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d3" readonly>혹시 최근에 비슷한 문자 받아보신 적 있으신가요?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #스미싱 #따릉이문자 #따릉이개인정보유출 #서울시설공단 #개인정보유출 #피싱예방 #따릉이보상</textarea>
-<div class="row"><button id="b_c3" onclick="cp('c3')">본문 복사</button>
+<div class="row"><button id="b_d3" onclick="cp('d3')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <div class="card">
 <div class="head"><span class="no">4</span><span class="ty">상황·문제형</span>
 <span class="ti">따릉이 안 쓰는데 유출 문자 왔어요, 왜 그럴까요</span></div>
-<div class="meta">738자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t4" readonly>따릉이 안 쓰는데 유출 문자 왔어요, 왜 그럴까요</textarea>
+<div class="meta">734자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t4" readonly>따릉이 안 쓰는데 유출 문자 왔어요, 왜 그럴까요</textarea>
 <div class="row"><button id="b_t4" onclick="cp('t4')">제목 복사</button></div>
-<textarea id="c4" readonly>따릉이를 탄 기억이 없는데 안내문자를 받았다는 사례가 꽤 나옵니다. 가능성은 크게 세 가지로 갈립니다.
+
+<div class="step">2</div><textarea id="c4" readonly>따릉이를 탄 기억이 없는데 안내문자를 받았다는 사례가 꽤 나옵니다. 가능성은 크게 세 가지로 갈립니다.
 ⠀⠀⠀
 경우 1 : 예전에 가입만 하고 안 탄 계정
 경우 2 : 가족이 내 명의로 가입
@@ -188,24 +210,30 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 서울에 살지 않아도 여행이나 출장 때 가입한 계정이 남아 있는 경우가 많습니다.
 ⠀⠀⠀
-👉 가입 여부부터 확인하는 방법
-https://savemoney119.com/ttareungi-privacy-leak-compensation-check/
-⠀⠀⠀
-언제 가입했는지 기억나지 않는 서비스, 생각보다 많지 않으신가요?
+👉 가입 여부부터 확인해보기</textarea>
+<div class="row"><button id="b_c4" onclick="cp('c4')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u4" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u4" onclick="cp('u4')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d4" readonly>언제 가입했는지 기억나지 않는 서비스, 생각보다 많지 않으신가요?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #따릉이개인정보유출 #유출문자 #따릉이대상자 #서울시설공단 #개인정보유출 #스미싱주의 #따릉이가입</textarea>
-<div class="row"><button id="b_c4" onclick="cp('c4')">본문 복사</button>
+<div class="row"><button id="b_d4" onclick="cp('d4')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <div class="card">
 <div class="head"><span class="no">5</span><span class="ty">대상형</span>
 <span class="ti">따릉이 탈퇴 회원도 개인정보 유출 대상인가요</span></div>
-<div class="meta">691자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t5" readonly>따릉이 탈퇴 회원도 개인정보 유출 대상인가요</textarea>
+<div class="meta">687자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t5" readonly>따릉이 탈퇴 회원도 개인정보 유출 대상인가요</textarea>
 <div class="row"><button id="b_t5" onclick="cp('t5')">제목 복사</button></div>
-<textarea id="c5" readonly>탈퇴했다고 해서 과거에 유출된 사실이 사라지지는 않습니다. 다만 유출 대상인 것과 보상을 받는 것은 별개로 봐야 합니다.
+
+<div class="step">2</div><textarea id="c5" readonly>탈퇴했다고 해서 과거에 유출된 사실이 사라지지는 않습니다. 다만 유출 대상인 것과 보상을 받는 것은 별개로 봐야 합니다.
 ⠀⠀⠀
 유출 대상 여부 : 유출 시점에 회원이었다면 포함 가능
 정기권 수령 : 계정이 없으면 받기 어려움
@@ -229,24 +257,30 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 쿠폰을 못 받는다고 끝은 아닙니다. 비용이 들지 않는 공식 창구가 따로 있습니다.
 ⠀⠀⠀
-👉 탈퇴 회원이 쓸 수 있는 절차 보기
-https://savemoney119.com/ttareungi-privacy-leak-compensation-check/
-⠀⠀⠀
-탈퇴하면 내 정보도 같이 지워진다고 생각하고 계셨나요?
+👉 탈퇴 회원 기준까지 확인하기</textarea>
+<div class="row"><button id="b_c5" onclick="cp('c5')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u5" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u5" onclick="cp('u5')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d5" readonly>탈퇴하면 내 정보도 같이 지워진다고 생각하고 계셨나요?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #따릉이탈퇴 #따릉이개인정보유출 #따릉이대상자 #서울시설공단 #개인정보유출 #따릉이보상 #개인정보분쟁조정</textarea>
-<div class="row"><button id="b_c5" onclick="cp('c5')">본문 복사</button>
+<div class="row"><button id="b_d5" onclick="cp('d5')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <div class="card">
 <div class="head"><span class="no">6</span><span class="ty">대상형</span>
 <span class="ti">가족 명의 따릉이 개인정보 유출, 누가 대상자인가요</span></div>
-<div class="meta">703자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t6" readonly>가족 명의 따릉이 개인정보 유출, 누가 대상자인가요</textarea>
+<div class="meta">701자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t6" readonly>가족 명의 따릉이 개인정보 유출, 누가 대상자인가요</textarea>
 <div class="row"><button id="b_t6" onclick="cp('t6')">제목 복사</button></div>
-<textarea id="c6" readonly>부모님이나 배우자 명의로 가입해서 본인이 타온 경우가 많습니다. 이때 대상자는 실제로 탄 사람이 아니라 명의자입니다.
+
+<div class="step">2</div><textarea id="c6" readonly>부모님이나 배우자 명의로 가입해서 본인이 타온 경우가 많습니다. 이때 대상자는 실제로 탄 사람이 아니라 명의자입니다.
 ⠀⠀⠀
 정보 주체 : 가입 명의자
 정기권 수령 : 명의자 계정으로 지급
@@ -270,24 +304,30 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 가족 중에 따릉이를 한 번이라도 탄 사람이 있으면 명의부터 확인해보시길 권합니다.
 ⠀⠀⠀
-👉 명의자 기준 확인 절차 보기
-https://savemoney119.com/ttareungi-privacy-leak-compensation-check/
-⠀⠀⠀
-가족 명의로 가입해둔 서비스, 몇 개나 있는지 세어보신 적 있나요?
+👉 명의 기준 대상 여부 확인하기</textarea>
+<div class="row"><button id="b_c6" onclick="cp('c6')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u6" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u6" onclick="cp('u6')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d6" readonly>가족 명의로 가입해둔 서비스, 몇 개나 있는지 세어보신 적 있나요?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #따릉이명의 #따릉이개인정보유출 #따릉이대상자 #서울시설공단 #개인정보유출 #가족명의가입 #따릉이보상</textarea>
-<div class="row"><button id="b_c6" onclick="cp('c6')">본문 복사</button>
+<div class="row"><button id="b_d6" onclick="cp('d6')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <div class="card">
 <div class="head"><span class="no">7</span><span class="ty">대상형</span>
 <span class="ti">2024년 이후 가입 따릉이, 유출 대상 아닌가요</span></div>
-<div class="meta">663자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t7" readonly>2024년 이후 가입 따릉이, 유출 대상 아닌가요</textarea>
+<div class="meta">660자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t7" readonly>2024년 이후 가입 따릉이, 유출 대상 아닌가요</textarea>
 <div class="row"><button id="b_t7" onclick="cp('t7')">제목 복사</button></div>
-<textarea id="c7" readonly>유출은 2024년에 발생한 사고입니다. 그래서 가입 시기가 대상 여부를 가르는 가장 확실한 기준이 됩니다.
+
+<div class="step">2</div><textarea id="c7" readonly>유출은 2024년에 발생한 사고입니다. 그래서 가입 시기가 대상 여부를 가르는 가장 확실한 기준이 됩니다.
 ⠀⠀⠀
 유출 발생 : 2024년
 유출 이전 가입 : 462만명에 포함됐을 가능성 큼
@@ -311,24 +351,30 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 대상이 아니어도 유출된 정보로 오는 사칭 문자는 누구에게나 갈 수 있습니다.
 ⠀⠀⠀
-👉 가입일 확인하는 방법 보기
-https://savemoney119.com/ttareungi-privacy-leak-compensation-check/
-⠀⠀⠀
-따릉이 가입일, 바로 떠오르시나요?
+👉 가입 시기별 대상 여부 확인</textarea>
+<div class="row"><button id="b_c7" onclick="cp('c7')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u7" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u7" onclick="cp('u7')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d7" readonly>따릉이 가입일, 바로 떠오르시나요?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #따릉이가입일 #따릉이개인정보유출 #따릉이대상자 #서울시설공단 #개인정보유출 #462만명 #따릉이보상</textarea>
-<div class="row"><button id="b_c7" onclick="cp('c7')">본문 복사</button>
+<div class="row"><button id="b_d7" onclick="cp('d7')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <div class="card">
 <div class="head"><span class="no">8</span><span class="ty">대상형</span>
 <span class="ti">서울 안 사는데 따릉이 쿠폰 받아서 뭐하나요</span></div>
-<div class="meta">712자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t8" readonly>서울 안 사는데 따릉이 쿠폰 받아서 뭐하나요</textarea>
+<div class="meta">709자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t8" readonly>서울 안 사는데 따릉이 쿠폰 받아서 뭐하나요</textarea>
 <div class="row"><button id="b_t8" onclick="cp('t8')">제목 복사</button></div>
-<textarea id="c8" readonly>지방 거주자에게 따릉이 30일 정기권은 사실상 쓸 데가 없습니다. 실제로 이번 보상안에서 가장 많이 나온 불만이 이 부분입니다.
+
+<div class="step">2</div><textarea id="c8" readonly>지방 거주자에게 따릉이 30일 정기권은 사실상 쓸 데가 없습니다. 실제로 이번 보상안에서 가장 많이 나온 불만이 이 부분입니다.
 ⠀⠀⠀
 공단 보상 : 30일 정기권, 5,000원 상당
 지방 거주자 실질가치 : 거의 없음
@@ -352,24 +398,30 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 쓰지 못할 쿠폰을 기다리는 것보다 어떤 절차가 있는지 아는 편이 낫습니다.
 ⠀⠀⠀
-👉 5천원 말고 받는 방법 4가지 비교
-https://savemoney119.com/ttareungi-privacy-leak-compensation-apply/
-⠀⠀⠀
-쓸 수 없는 보상을 받아본 경험, 이번이 처음은 아니시죠?
+👉 쿠폰 말고 받을 수 있는 것까지 보기</textarea>
+<div class="row"><button id="b_c8" onclick="cp('c8')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u8" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u8" onclick="cp('u8')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d8" readonly>쓸 수 없는 보상을 받아본 경험, 이번이 처음은 아니시죠?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #따릉이쿠폰 #따릉이개인정보유출 #개인정보분쟁조정 #서울시설공단 #개인정보유출 #따릉이보상 #손해배상</textarea>
-<div class="row"><button id="b_c8" onclick="cp('c8')">본문 복사</button>
+<div class="row"><button id="b_d8" onclick="cp('d8')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <div class="card">
 <div class="head"><span class="no">9</span><span class="ty">절차·금액형</span>
 <span class="ti">따릉이 보상 쿠폰 3개월 지나면 소멸되나요</span></div>
-<div class="meta">752자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t9" readonly>따릉이 보상 쿠폰 3개월 지나면 소멸되나요</textarea>
+<div class="meta">749자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t9" readonly>따릉이 보상 쿠폰 3개월 지나면 소멸되나요</textarea>
 <div class="row"><button id="b_t9" onclick="cp('t9')">제목 복사</button></div>
-<textarea id="c9" readonly>소멸됩니다. 30일 정기권은 받은 날부터 3개월 안에 사용해야 합니다. 기한을 넘기면 그대로 사라지고 재발급 안내는 나온 것이 없습니다.
+
+<div class="step">2</div><textarea id="c9" readonly>소멸됩니다. 30일 정기권은 받은 날부터 3개월 안에 사용해야 합니다. 기한을 넘기면 그대로 사라지고 재발급 안내는 나온 것이 없습니다.
 ⠀⠀⠀
 사용 기한 : 지급받은 날부터 3개월
 기존 정기권 보유자 : 기존 기간 종료 후부터 3개월
@@ -394,24 +446,30 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 앱에 쿠폰이 들어온 날짜를 캡처해두면 기한 계산이 훨씬 쉬워집니다.
 ⠀⠀⠀
-👉 쿠폰 말고 다른 선택지 비교하기
-https://savemoney119.com/ttareungi-privacy-leak-compensation-apply/
-⠀⠀⠀
-기한 있는 쿠폰, 그냥 넘겨버린 적 있으신가요?
+👉 기한 계산과 선택지 한 번에 보기</textarea>
+<div class="row"><button id="b_c9" onclick="cp('c9')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u9" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u9" onclick="cp('u9')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d9" readonly>기한 있는 쿠폰, 그냥 넘겨버린 적 있으신가요?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #따릉이정기권 #쿠폰소멸 #따릉이개인정보유출 #서울시설공단 #개인정보유출 #따릉이보상 #사용기한</textarea>
-<div class="row"><button id="b_c9" onclick="cp('c9')">본문 복사</button>
+<div class="row"><button id="b_d9" onclick="cp('d9')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <div class="card">
 <div class="head"><span class="no">10</span><span class="ty">절차·금액형</span>
 <span class="ti">따릉이 개인정보 유출 손해배상 얼마 받나, 절차별 비교</span></div>
-<div class="meta">738자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
-<textarea class="t" id="t10" readonly>따릉이 개인정보 유출 손해배상 얼마 받나, 절차별 비교</textarea>
+<div class="meta">734자 · 링크 2개 · 점검 <span class="ok">통과</span></div>
+
+<div class="step">1</div><textarea class="t" id="t10" readonly>따릉이 개인정보 유출 손해배상 얼마 받나, 절차별 비교</textarea>
 <div class="row"><button id="b_t10" onclick="cp('t10')">제목 복사</button></div>
-<textarea id="c10" readonly>공단이 내놓은 보상은 5,000원 상당의 30일 정기권입니다. 그런데 과거 유사 사건들의 판결은 금액이 달랐습니다.
+
+<div class="step">2</div><textarea id="c10" readonly>공단이 내놓은 보상은 5,000원 상당의 30일 정기권입니다. 그런데 과거 유사 사건들의 판결은 금액이 달랐습니다.
 ⠀⠀⠀
 공단 보상 : 30일 정기권, 5,000원 상당
 분쟁조정 : 무료, 금액은 사안별
@@ -436,15 +494,19 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 순서는 유출 사실 확정, 무료 창구 확인, 그다음 소송 검토입니다.
 ⠀⠀⠀
-👉 선택지 4가지 비용까지 비교하기
-https://savemoney119.com/ttareungi-privacy-leak-compensation-apply/
-⠀⠀⠀
-5,000원과 10만원 사이, 어디까지 알아보실 생각이신가요?
+👉 선택지별 금액과 비용 비교 보기</textarea>
+<div class="row"><button id="b_c10" onclick="cp('c10')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u10" readonly>https://savemoney119.com/ttareungi-privacy-leak-compensation/</textarea>
+<div class="row"><button id="b_u10" onclick="cp('u10')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d10" readonly>5,000원과 10만원 사이, 어디까지 알아보실 생각이신가요?
 ⠀⠀⠀
 ※ 이 글은 공개된 보도와 공공기관 발표를 정리한 정보 안내이며, 법률 자문이 아닙니다.
 ⠀⠀⠀
 #따릉이 #손해배상 #따릉이개인정보유출 #개인정보분쟁조정 #서울시설공단 #개인정보유출 #공동소송 #따릉이보상</textarea>
-<div class="row"><button id="b_c10" onclick="cp('c10')">본문 복사</button>
+<div class="row"><button id="b_d10" onclick="cp('d10')">마무리 복사</button>
 <button class="g" onclick="window.open('https://savemoney119.com/ttareungi-privacy-leak-compensation/','_blank')">허브 열기</button></div>
 </div>
 <script>

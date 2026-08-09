@@ -47,29 +47,44 @@ def strip_markdown(s):
 
 
 def build_body(p, hub, disclaimer):
-    """문단 리스트. 원소 하나 = 화면상 한 문단. 사이에 점자 빈칸이 들어간다."""
-    b = []
-    b.append(" ".join(p["intro"]))
-    b.append("\n".join(f"{k} : {v}" for k, v in p["table"]))
-    b.append(p["sub1"])
+    """붙여넣기 3덩어리로 나눠 반환한다 → (본문A, 링크URL, 본문B)
+
+    ■ 왜 3덩어리인가 (2026-08-09 실측)
+    네이버는 대량 붙여넣기한 URL을 '파란 밑줄 텍스트 링크'로만 만든다.
+    썸네일이 붙은 **링크 카드**가 되려면 URL 을 단독으로 넣고 엔터를 쳐야 한다.
+    카드는 이미지가 크게 떠서 클릭률이 훨씬 높으므로, 마지막 링크만 따로 뺀다.
+
+    ■ 링크는 전부 메인허브 하나로만 보낸다 (2026-08-09 설계 확정)
+    스포크로 직접 보내면 광고 2개만 보고 끝난다.
+    허브로 모으면 허브(광고 1) → CTA → 스포크(광고 2) 로 3개를 본다.
+    백링크도 허브 한 곳에 뭉쳐야 신생 도메인에서 신호가 선다.
+    """
+    a = []
+    a.append(" ".join(p["intro"]))
+    a.append("\n".join(f"{k} : {v}" for k, v in p["table"]))
+    a.append(p["sub1"])
     for i in range(0, len(p["body1"]), 2):           # 2문장씩 한 문단
-        b.append(" ".join(p["body1"][i:i + 2]))
-    lead, push, anchor, key = p["cta_mid"]
-    b.append(f"{lead} {push}")
-    b.append(f"👉 {anchor}\n{hub[key]}")             # 링크 1회차 = 본문 중간
-    b.append("📌 이것만은 확인하세요")
-    b.append("\n".join(p["warns"]))
-    b.extend(p["outro"])
-    anchor2, key2 = p["cta_end"]
-    b.append(f"👉 {anchor2}\n{hub[key2]}")           # 링크 2회차 = 글 마지막
-    b.append(p["question"])
-    b.append(disclaimer)
-    b.append(" ".join(p["tags"]))
-    return [strip_markdown(x) for x in b]
+        a.append(" ".join(p["body1"][i:i + 2]))
+    lead, push, anchor, _ = p["cta_mid"]
+    a.append(f"{lead} {push}")
+    a.append(f"👉 {anchor}\n{hub['hub']}")           # 링크 1회차 = 본문 중간(텍스트)
+    a.append("📌 이것만은 확인하세요")
+    a.append("\n".join(p["warns"]))
+    a.extend(p["outro"])
+    anchor2 = p["cta_end"][0] if p.get("cta_end") else "전체 내용 보기"
+    a.append(f"👉 {anchor2}")                        # 카드 바로 위 안내 문구
+
+    b = [p["question"], disclaimer, " ".join(p["tags"])]
+
+    return ([strip_markdown(x) for x in a],
+            hub["hub"],                              # 링크 2회차 = 카드로 삽입
+            [strip_markdown(x) for x in b])
 
 
 def render(p, hub, disclaimer):
-    return f"\n{BRAILLE}\n".join(build_body(p, hub, disclaimer))
+    """검증·미리보기용 전체 본문 (실제 붙여넣기는 3덩어리로 나눠서 한다)."""
+    a, url, b = build_body(p, hub, disclaimer)
+    return f"\n{BRAILLE}\n".join(a + [url] + b)
 
 
 def check(p, text):
@@ -84,8 +99,10 @@ def check(p, text):
     links = re.findall(r"https?://\S+", text)
     if len(links) != LINKS_PER_POST:
         probs.append(f"링크 {len(links)}회 (정확히 {LINKS_PER_POST}회)")
-    if len(set(links)) != len(links):
-        probs.append("같은 URL 반복 — 저품질 신호")
+    # 2026-08-09: 링크는 전부 메인허브 하나로 통일한다. 같은 URL 2회는 허용,
+    # 3회 이상이 저품질 신호다. 서로 다른 도메인이 섞이면 잡는다.
+    if len(set(links)) > 1:
+        probs.append(f"링크가 {len(set(links))}종 — 메인허브 하나로만 보내야 한다")
     if links and text.find(links[0]) < len(text) * 0.25:
         probs.append("첫 링크가 글 앞부분 — 외부 유출 목적으로 읽힐 수 있음")
     for u in links:
@@ -132,7 +149,9 @@ h1{{font-size:21px;margin:0 0 6px}}
 .ok{{color:var(--ac)}} .bad{{color:#ff7a7a}}
 textarea{{width:100%;height:250px;background:#0d1017;color:#d7dbe6;border:1px solid var(--line);
 border-radius:8px;padding:12px;font-family:inherit;font-size:13px;line-height:1.75;resize:vertical;white-space:pre-wrap}}
-textarea.t{{height:44px}}
+textarea.t{{height:44px}} textarea.s{{height:110px}}
+.step{{margin:14px 0 6px;font-size:12px;font-weight:700;color:var(--ac)}}
+.step em{{font-style:normal;font-weight:400;color:var(--mut);margin-left:6px}}
 .row{{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}}
 button{{background:var(--ac);color:#0f1116;border:0;border-radius:8px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit}}
 button.g{{background:#242a36;color:#c3c9d8}}
@@ -140,11 +159,11 @@ button.g{{background:#242a36;color:#c3c9d8}}
 <h1>네이버 스탠바이 {n}건 · {topic}</h1>
 <div class="sub">{date} 세트 · {stype}형 배분 · 전부 savemoney119 허브로 유입</div>
 <div class="guide">
-<b>쓰는 법</b> — 제목 복사 → 네이버 글쓰기 제목칸 / 본문 복사 → 본문칸 그대로 붙여넣기.<br>
+<b>쓰는 법</b> — 글 1개당 복사 버튼 4개를 <b>1 → 2 → 3 → 4 순서</b>로 누릅니다.<br>
 문단 간격은 점자 빈칸(U+2800)이라 붙여넣어도 살아남습니다. 지우지 마세요.<br>
 <b>표 3줄</b>은 그대로 둬도 되고, 네이버 표 도구로 3행 2열에 옮기면 더 좋습니다.<br>
 <b>발행 간격</b> — 한 번에 올리지 말고 하루에 걸쳐 60~90분 간격으로 흩어서.<br>
-<b>링크 규칙</b> — 글당 정확히 2개(중간 허브 1 · 마지막 스포크 1). 늘리지 마세요.
+<b>링크 규칙</b> — 글당 정확히 2회, 둘 다 <b>메인허브 하나로만</b>. 스포크는 허브의 CTA가 보낸다.<br>복사 버튼을 <b>1→2→3→4 순서대로</b> 누릅니다. 3번 URL은 붙여넣고 엔터를 쳐야 카드가 뜬다.
 </div>
 {cards}
 <script>
@@ -161,11 +180,20 @@ CARD_TPL = """<div class="card">
 <div class="head"><span class="no">{no}</span><span class="ty">{ty}</span>
 <span class="ti">{title}</span></div>
 <div class="meta">{chars}자 · 링크 {links}개 · 점검 {verdict}</div>
-<textarea class="t" id="t{no}" readonly>{title}</textarea>
+
+<div class="step">1</div><textarea class="t" id="t{no}" readonly>{title}</textarea>
 <div class="row"><button id="b_t{no}" onclick="cp('t{no}')">제목 복사</button></div>
-<textarea id="c{no}" readonly>{body}</textarea>
-<div class="row"><button id="b_c{no}" onclick="cp('c{no}')">본문 복사</button>
-<button class="g" onclick="window.open('{hub}','_blank')">허브 열기</button></div>
+
+<div class="step">2</div><textarea id="c{no}" readonly>{bodyA}</textarea>
+<div class="row"><button id="b_c{no}" onclick="cp('c{no}')">본문 앞부분 복사</button></div>
+
+<div class="step">3 <em>붙여넣고 엔터 → 썸네일 카드가 뜬다</em></div>
+<textarea class="t" id="u{no}" readonly>{url}</textarea>
+<div class="row"><button id="b_u{no}" onclick="cp('u{no}')">허브 링크 복사</button></div>
+
+<div class="step">4</div><textarea class="s" id="d{no}" readonly>{bodyB}</textarea>
+<div class="row"><button id="b_d{no}" onclick="cp('d{no}')">마무리 복사</button>
+<button class="g" onclick="window.open('{url}','_blank')">허브 열기</button></div>
 </div>"""
 
 
@@ -176,6 +204,7 @@ def main():
 
     cards, report, texts = [], [], []
     for i, p in enumerate(d["posts"], 1):
+        bodyA, url, bodyB = build_body(p, hub, dis)
         t = render(p, hub, dis)
         texts.append(t)
         probs = check(p, t)
@@ -183,11 +212,12 @@ def main():
         links = re.findall(r"https?://\S+", t)
         verdict = ('<span class="ok">통과</span>' if not probs
                    else '<span class="bad">' + " / ".join(probs) + "</span>")
+        sep = "\n" + BRAILLE + "\n"
         cards.append(CARD_TPL.format(
             no=i, ty=p["type"], title=html.escape(p["title"]),
-            body=html.escape(t), chars=len(re.sub(r"\s", "", t)),
-            links=len(links), verdict=verdict,
-            hub=links[0] if links else hub["hub"]))
+            bodyA=html.escape(sep.join(bodyA)), url=url,
+            bodyB=html.escape(sep.join(bodyB)),
+            chars=len(re.sub(r"\s", "", t)), links=len(links), verdict=verdict))
 
     xprobs = cross_check(texts)
     outdir = os.path.join(ROOT, "output", date)
