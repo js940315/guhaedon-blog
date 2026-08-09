@@ -1,36 +1,4 @@
-<meta charset="utf-8"><title>구해돈 홈판 스탠바이 0810</title>
-<style>
-body{font-family:'Malgun Gothic',sans-serif;max-width:900px;margin:0 auto;padding:24px;background:#f6f7f9;color:#16181d}
-h1{font-size:20px;margin:0 0 4px} h2{font-size:16px;margin:26px 0 10px}
-.meta{color:#5b6472;font-size:13px;margin-bottom:18px}
-.warn{background:#fff8e6;border:1px solid #f0d98a;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.75;margin-bottom:16px}
-.bar{display:flex;gap:8px;align-items:center;margin-bottom:10px}
-button{border:0;background:#03c75a;color:#fff;padding:10px 20px;border-radius:6px;cursor:pointer;font-size:14px}
-button.sm{padding:6px 14px;font-size:13px;background:#2b6cb0}
-button.done{background:#5b6472}
-pre{white-space:pre-wrap;word-break:break-all;background:#fff;border:1px solid #e3e6ea;border-radius:10px;padding:16px;margin:0;font-family:inherit;font-size:14px;line-height:1.9}
-mark{background:#ffe9a8;padding:1px 3px;border-radius:3px}
-mark.u{background:#cfe4ff}
-table{width:100%;border-collapse:collapse;background:#fff;font-size:13px;border:1px solid #e3e6ea}
-th,td{border-bottom:1px solid #eef1f5;padding:9px 12px;text-align:left} th{background:#eef1f5}
-</style>
-<h1>구해돈 · 네이버 홈판 스탠바이</h1>
-<div class="meta">2026-08-10 · 따릉이 보상 쿠폰 · 본문 1445자 · 사진 5장 · 검증 문제 0건</div>
-<div class="warn">
-<b>붙여넣는 순서</b><br>
-1. 제목 복사 → 제목칸<br>
-2. <b>본문 전체 복사</b> → 본문칸 (해시태그까지 한 번에 들어갑니다)<br>
-3. 노란 <mark>【N번 사진】</mark> 자리를 지우고 그 자리에 사진 업로드<br>
-4. 파란 <mark class="u">【여기에 허브 URL…】</mark> 자리를 지우고 <b>URL만 단독으로 붙여넣고 엔터</b><br>
-&nbsp;&nbsp;&nbsp;→ 이때만 썸네일 카드가 뜹니다. 본문과 같이 붙여넣으면 밋밋한 텍스트 링크가 됩니다.
-</div>
-<h2>제목</h2>
-<div class="bar"><button onclick="cp(this,'t')">제목 복사</button></div>
-<pre id="t">따릉이 보상 쿠폰 8월 지급, 받고도 3개월 뒤 사라집니다</pre>
-<h2>본문 (해시태그 포함 · 한 번에 복사)</h2>
-<div class="bar"><button onclick="cp(this,'b')">본문 전체 복사</button>
-<button class="sm" onclick="cp(this,'u')">허브 URL 복사</button></div>
-<pre id="b">【1번 사진】
+【1번 사진】
 ⠀⠀⠀
 서울시설공단이 개인정보 유출 피해 회원 462만 명에게 따릉이 30일 정기권을 지급합니다.
 시중가로 5,000원 상당이고, 8월 중에 앱으로 일괄 들어옵니다.
@@ -112,17 +80,4 @@ https://savemoney119.com/ttareungi-privacy-leak-compensation/
 ⠀⠀⠀
 ※ 지급 일정과 조건은 서울시설공단 공식 공지를 다시 확인해주세요.
 ⠀⠀⠀
-#따릉이 #따릉이보상쿠폰 #따릉이개인정보유출 #따릉이정기권 #서울시설공단 #개인정보유출보상 #30일정기권 #따릉이앱</pre>
-<div style="display:none" id="u">https://savemoney119.com/ttareungi-privacy-leak-compensation/</div>
-<h2>사진 5장</h2>
-<table><tr><th>파일</th><th>종류</th><th>들어가는 자리</th><th>카피</th><th>상태</th></tr><tr><td><b>1번 사진</b></td><td>홈판 대표 썸네일</td><td>제목 바로 아래</td><td>따릉이 5천원 쿠폰 / 3개월 뒤 사라집니다</td><td>있음</td></tr><tr><td><b>2번 사진</b></td><td>실사 카드</td><td>도입 3문장 직후</td><td>아이디와 번호에 체중까지 넘어갔습니다</td><td>있음</td></tr><tr><td><b>3번 사진</b></td><td>숫자 카드</td><td>1챕터 끝</td><td>5,000원 — 462만 명이 받는 정기권 한 장 값</td><td>있음</td></tr><tr><td><b>4번 사진</b></td><td>정리 카드</td><td>중간 링크 바로 위</td><td>쿠폰 받기 전에 확인할 3가지</td><td>있음</td></tr><tr><td><b>5번 사진</b></td><td>막대 카드</td><td>3챕터 끝</td><td>알리는 데 2년, 쓰는 데 3개월</td><td>있음</td></tr></table>
-<script>
-document.getElementById('b').innerHTML = document.getElementById('b').innerHTML
-  .replace(/【[^】]*번 사진】/g, m => '<mark>'+m+'</mark>')
-  .replace(/【여기에[^】]*】/g, m => '<mark class="u">'+m+'</mark>');
-function cp(btn,id){
-  navigator.clipboard.writeText(document.getElementById(id).innerText)
-    .then(()=>{const o=btn.textContent;btn.textContent='복사됨';btn.className=btn.className+' done';
-      setTimeout(()=>{btn.textContent=o;btn.className=btn.className.replace(' done','');},1500);});
-}
-</script>
+#따릉이 #따릉이보상쿠폰 #따릉이개인정보유출 #따릉이정기권 #서울시설공단 #개인정보유출보상 #30일정기권 #따릉이앱
