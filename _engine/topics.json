@@ -1,0 +1,210 @@
+{
+  "_설명": [
+    "키워드별 사진 검색 계획서. source_photo.py 가 이 파일을 읽어 집행한다.",
+    "",
+    "verify — 있으면 '브랜드 실물을 구할 수 있는 소재'라는 뜻이다.",
+    "  Wikimedia 결과의 출처 문자열에 이 단어 중 하나가 실제로 들어있어야 채택한다.",
+    "  없으면 폐기하고 다음 검색어로 넘어간다. 오매칭 방지 장치이고, 이게 없으면",
+    "  '쿠팡'을 찾다가 인도네시아 Kupang 시 해변 사진이 그대로 실린다 (실측).",
+    "",
+    "verify 가 없는 소재 = 제도·개념. 찍을 실물이 애초에 없으므로 스톡 상황 컷으로 간다.",
+    "  이 경우 검색어는 반드시 영문 소문자로 쓴다 (한글은 스톡에서 0건).",
+    "",
+    "thumb / card — 역할이 다르므로 검색어도 다르다 (운영 매뉴얼 3-3절)",
+    "  thumb : 120px 로 줄어든다 → 피사체 하나가 화면을 채우는 클로즈업",
+    "  card  : 화면 폭 전체로 본다 → 전경·상황 컷이 오히려 낫다",
+    "",
+    "⚠️ 제도형 검색어 금칙어 (2026-08-10 실측) — 둘 다 '외국 티'가 나서 이질감을 만든다",
+    "   1) document·form·paperwork → 미국 세금서식(Form 1040)이 잔뜩 나온다.",
+    "   2) money·cash·banknote     → 달러·외국 지폐가 나온다. 한국 세금 글에 달러는 안 맞는다.",
+    "   대신 국적이 안 드러나는 사물 클로즈업을 노린다:",
+    "   계산기 · 동전 · 영수증 · 열쇠 · 저금통 · 청진기 · 장바구니."
+  ],
+  "version": 2,
+  "topics": {
+    "따릉이": {
+      "slug": "ttareungi",
+      "kind": "브랜드",
+      "season": "이슈",
+      "verify": [
+        "따릉이",
+        "Seoul Bike",
+        "Bicycle-sharing"
+      ],
+      "thumb": [
+        "따릉이"
+      ],
+      "card": [
+        "따릉이",
+        "bicycle sharing station"
+      ]
+    },
+    "쿠팡 개인정보 유출": {
+      "slug": "coupang_leak",
+      "kind": "브랜드",
+      "season": "긴급",
+      "verify": [
+        "Coupang",
+        "쿠팡"
+      ],
+      "thumb": [
+        "Coupang",
+        "쿠팡",
+        "smartphone alert close up"
+      ],
+      "card": [
+        "Coupang",
+        "delivery boxes stacked"
+      ]
+    },
+    "쿠팡 10만원 보상": {
+      "slug": "coupang_compensation",
+      "kind": "브랜드",
+      "season": "긴급",
+      "verify": [
+        "Coupang",
+        "쿠팡"
+      ],
+      "thumb": [
+        "Coupang",
+        "쿠팡",
+        "smartphone screen in hand close up"
+      ],
+      "card": [
+        "Coupang",
+        "parcel at doorstep"
+      ]
+    },
+    "테무 개인정보 유출": {
+      "slug": "temu_leak",
+      "kind": "제도",
+      "season": "긴급",
+      "_주의": "위키미디어에 테무 실물이 없다. '테무'/'Temu' 는 이탈리아 Temù 마을과 겹쳐 오매칭된다. 상황 컷으로만 간다.",
+      "thumb": [
+        "shopping app on smartphone close up",
+        "smartphone in hand close up"
+      ],
+      "card": [
+        "online shopping parcels",
+        "cardboard boxes delivery"
+      ]
+    },
+    "모두의카드": {
+      "slug": "moduui_card",
+      "kind": "제도",
+      "season": "이슈",
+      "thumb": [
+        "credit card close up",
+        "payment card in hand close up"
+      ],
+      "card": [
+        "card payment terminal shop",
+        "wallet with cards"
+      ]
+    },
+    "종합소득세": {
+      "slug": "jonghap_sodeuk",
+      "kind": "제도",
+      "season": "5월",
+      "thumb": [
+        "calculator close up",
+        "coins stacked close up"
+      ],
+      "card": [
+        "calculator on desk",
+        "coins on wooden table"
+      ]
+    },
+    "부가가치세 신고": {
+      "slug": "bugagachi",
+      "kind": "제도",
+      "season": "1월·7월",
+      "thumb": [
+        "receipt roll close up",
+        "cash register close up"
+      ],
+      "card": [
+        "small shop counter",
+        "receipts pile on table"
+      ]
+    },
+    "근로장려금": {
+      "slug": "geunro_jangryeo",
+      "kind": "제도",
+      "season": "5월·9월",
+      "thumb": [
+        "coins in hand close up",
+        "piggy bank close up"
+      ],
+      "card": [
+        "piggy bank on table",
+        "coins jar on desk"
+      ]
+    },
+    "민생지원금": {
+      "slug": "minsaeng",
+      "kind": "제도",
+      "season": "이슈",
+      "thumb": [
+        "payment card in hand close up",
+        "shopping basket close up"
+      ],
+      "card": [
+        "traditional market stall",
+        "grocery shopping bags"
+      ]
+    },
+    "연말정산": {
+      "slug": "yeonmal",
+      "kind": "제도",
+      "season": "1월·2월",
+      "thumb": [
+        "calculator close up",
+        "pen and coins close up"
+      ],
+      "card": [
+        "office desk evening",
+        "calculator and notebook desk"
+      ]
+    },
+    "자동차세": {
+      "slug": "jadongchase",
+      "kind": "제도",
+      "season": "6월·12월",
+      "thumb": [
+        "car key close up",
+        "steering wheel close up"
+      ],
+      "card": [
+        "parked cars city street",
+        "car in parking lot"
+      ]
+    },
+    "재산세": {
+      "slug": "jaesanse",
+      "kind": "제도",
+      "season": "7월·9월",
+      "thumb": [
+        "house key close up",
+        "miniature house model close up"
+      ],
+      "card": [
+        "apartment buildings skyline",
+        "residential neighborhood"
+      ]
+    },
+    "건강보험료": {
+      "slug": "geongang_boheom",
+      "kind": "제도",
+      "season": "4월",
+      "thumb": [
+        "stethoscope close up",
+        "pills close up"
+      ],
+      "card": [
+        "hospital corridor",
+        "clinic waiting area"
+      ]
+    }
+  }
+}
