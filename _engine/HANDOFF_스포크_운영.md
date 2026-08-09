@@ -251,6 +251,7 @@ python _engine/source_photo.py --adhoc "OO 유출" --slug oo --thumb "..." --car
 | `document` `form` `paperwork` | 미국 세금서식(Form 1040) |
 | `money` `cash` `banknote` | 달러·외국 지폐 |
 | `screen` `app` `smartphone` | **폰 화면에 찍힌 남의 브랜드 로고** |
+| `coins` (단독) | **암호화폐 코인** — 비트코인 심볼이 박혀 나온다 |
 
 앞의 둘은 "외국 티"가 나서 이질감을 만든다. 한국 세금 글에 1040 서식이나 달러가 깔리면 끝이다.
 세 번째는 더 위험하다 — 테무 썸네일 배경에 **Alipay 로고가 박힌 폰 화면**이 잡혀 나왔다.
@@ -295,6 +296,12 @@ cu.build_thumbnail_svg(..., logo_path="assets/photos/temu_leak_logo.png")
 verify 를 통과하고도 엉뚱한 게 섞인다(쿠팡 검색에 옛 지도 스캔본 1장이 뚫고 들어왔다).
 소싱이 끝나면 `assets/photos/_검수_{slug}.jpg` 몽타주가 생기므로 **반드시 보고** 지운다.
 윗줄은 원본, **아랫줄은 실제 홈판 크기(120px)** 다.
+
+> 🔴 **몽타주만으로는 부족하다. 썸네일로 쓸 컷은 원본 크기로 한 번 더 본다.**
+> 근로장려금 소싱에서 `coins in hand` 로 받은 사진이 **암호화폐 코인**이었는데,
+> 몽타주 크기(220px)에서는 일반 동전과 구별이 안 됐다. 렌더하고 나서야
+> 비트코인 심볼이 보였다. 정부지원금 글에 크립토가 깔릴 뻔했다.
+> **1번 썸네일에 쓸 사진만큼은 원본을 열어보는 것을 절차로 둔다.**
 
 **지킬 것**
 - 라이선스가 확인된 것만 채택한다 (`Public domain` / `CC0` / `CC BY` / `CC BY-SA` / `KOGL`

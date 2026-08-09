@@ -188,7 +188,8 @@ def main() -> None:
                                      re.sub(r"https?://\S+", "", body)))
     chars = len(re.sub(r"\s", "", txt))
 
-    out = REPO / "output" / f"{d['date']}_홈판"
+    # out_name 을 주면 그 이름으로 나간다. 하루에 홈판 글이 둘 이상일 때 폴더가 겹치지 않게.
+    out = REPO / "output" / (d.get("out_name") or f"{d['date']}_홈판")
     out.mkdir(parents=True, exist_ok=True)
     (out / "0번 본문.txt").write_text(body, encoding="utf-8")
     (out / "네이버_스탠바이_홈판.html").write_text(
