@@ -229,6 +229,35 @@ def publish_set(spec, env_path=None, thumb_dir=None, dry_run=False,
                 excerpt=c["excerpt"], focus_keyword=c["focus"], seo_description=c["excerpt"])
             res["mode"] = "create"
 
+            # 🔴 2026-08-10 실측 — 신규 발행에서 og:image 가 사이트 로고로 나갔다.
+            #   publish_full_post 안에서도 rank math 를 패치하지만 og_image_url 로
+            #   넘어가는 media_url 이 비어 있어 `if og_image_url.strip():` 에서
+            #   조용히 건너뛴다. 대표이미지는 정상 설정되는데 og:image 만 폴백된다.
+            #   또 신규 경로는 og_title/og_desc 를 아예 넘기지 않아 카드 문구가 SEO 제목
+            #   그대로 나간다(v4 규칙 위반).
+            #   → 발행된 글에서 featured_media 를 되짚어 URL 을 확보하고 다시 박는다.
+            #     덮어쓰기 경로와 동일한 상태로 맞추는 보정이다.
+            if res.get("ok") and res.get("post_id"):
+                og_url = ""
+                try:
+                    fm = requests.get(site + f"/wp-json/wp/v2/posts/{res['post_id']}",
+                                      params={"_fields": "featured_media"},
+                                      auth=_auth(wp_id, wp_pw), timeout=40).json()
+                    mid = fm.get("featured_media")
+                    if mid:
+                        og_url = requests.get(site + f"/wp-json/wp/v2/media/{mid}",
+                                              params={"_fields": "source_url"},
+                                              auth=_auth(wp_id, wp_pw), timeout=40
+                                              ).json().get("source_url", "")
+                except (requests.RequestException, ValueError, KeyError):
+                    mid = None
+                if og_url or c.get("og_title") or c.get("og_desc"):
+                    res["rank_math_meta_patch"] = patch_rank_math_meta_v2(
+                        site, wp_id, wp_pw, int(res["post_id"]),
+                        og_image_url=og_url, og_image_id=mid,
+                        og_title=c.get("og_title", ""),
+                        og_description=c.get("og_desc", ""))
+
         rm = res.get("rank_math_meta_patch")
         rec = {"key": key, "tier": tier_of[key], "slug": slug, "title": c["title"],
                "mode": res.get("mode"), "ok": res.get("ok"), "post_id": res.get("post_id"),
