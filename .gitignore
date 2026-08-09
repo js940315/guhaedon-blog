@@ -18,3 +18,14 @@ desktop.ini
 _logoprobe/
 _tmp_photos/
 output/_*/
+
+# wp_lite — 자격증명은 절대 커밋하지 않는다 (저장소가 Public 이다)
+wp_lite/.env*
+wp_lite/**/.env*
+.env.json
+.env.travel.json
+# 일회성 산출물
+wp_lite/thumb_*/
+wp_lite/og_시안/
+wp_lite/_report_*.json
+wp_lite/__pycache__/
