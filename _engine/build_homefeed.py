@@ -24,7 +24,6 @@
 """
 from __future__ import annotations
 
-import html
 import json
 import pathlib
 import re
@@ -32,7 +31,10 @@ import sys
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 BR = "⠀⠀⠀"                      # 점자 빈칸 3개 — 문단 구분
-URL_SLOT = "【여기에 허브 URL 단독 입력 + 엔터 → 이미지 카드】"
+# 예전에는 여기에 마커를 넣고 사람이 URL 을 직접 입력하게 했다. 그런데 복붙할 때
+# 마커를 지우고 주소를 다시 찾아 넣는 게 번거롭다는 피드백이 있었다(2026-08-10).
+# 이제 **실제 주소를 그대로 박는다.** 붙여넣으면 그 자리에 텍스트 링크가 생기고,
+# 카드로 바꾸고 싶으면 그 줄만 잘라내 다시 입력하고 엔터를 치면 된다.
 
 # 분량·장수는 데이터에서 읽는다. 아직 실측으로 확정된 값이 아니라 트랙마다 다르게 간다.
 #   economy-blog 홈판 스펙은 1,400~1,600자지만 그건 뉴스 소재 · 하루 소수 발행 기준이다.
@@ -52,7 +54,7 @@ def build_body(d: dict) -> str:
     body = d["body"]
     for i in range(1, len(d["images"]) + 1):
         body = body.replace(f"{{{{IMG{i}}}}}", f"【{i}번 사진】")
-    body = body.replace("{{URL_CARD}}", URL_SLOT)
+    body = body.replace("{{URL_CARD}}", d["hub"])
     body = body.replace("{{URL_TEXT}}", f"{d['cta_text']}\n{d['hub']}")
     body = body.replace("{{BR}}", BR)
     return body
@@ -75,23 +77,17 @@ def validate(body: str, d: dict) -> list[str]:
     if not (lo <= n <= hi):
         probs.append(f"본문 {n}자 — 규격 {lo:,}~{hi:,}자 벗어남")
 
-    # 링크 — 본문에 박히는 건 최하단 텍스트 링크 하나뿐. 중간은 자리만 비워둔다.
-    if len(inline) != 1:
-        probs.append(f"본문 내 URL {len(inline)}개 — 최하단 텍스트 링크 1개여야 함")
-    if inline and inline[0] != d["hub"]:
-        probs.append("최하단 링크가 메인허브가 아니다")
-    if URL_SLOT not in body:
-        probs.append("중간 URL 카드 자리가 없다")
-
-    # 순서 — 카드가 텍스트 링크보다 앞에 있어야 한다
-    if URL_SLOT in body and inline:
-        if body.find(URL_SLOT) > body.find(inline[0]):
-            probs.append("중간 카드가 최하단 텍스트 링크보다 뒤에 있다")
+    # 링크 — 중간(카드 자리)과 최하단(텍스트) 두 곳. 둘 다 같은 메인허브다.
+    if len(inline) != 2:
+        probs.append(f"본문 내 URL {len(inline)}개 — 중간·최하단 2개여야 함")
+    if inline and set(inline) != {d["hub"]}:
+        probs.append(f"링크가 {len(set(inline))}종 — 메인허브 하나로만 보내야 한다")
 
     # 위치 — 맨 위 링크 금지
-    first = min([body.find(URL_SLOT)] + ([body.find(inline[0])] if inline else []))
-    if first < len(body) * 0.25:
-        probs.append(f"첫 링크가 글 앞 {first/len(body)*100:.0f}% 지점 — 25% 이후여야 함")
+    if inline:
+        first = body.find(inline[0])
+        if first < len(body) * 0.25:
+            probs.append(f"첫 링크가 글 앞 {first/len(body)*100:.0f}% 지점 — 25% 이후여야 함")
 
     if len(markers) != n_img:
         probs.append(f"사진 마커 {len(markers)}개 — {n_img}개여야 함")
@@ -114,68 +110,6 @@ def validate(body: str, d: dict) -> list[str]:
     return probs
 
 
-def render_html(d: dict, body: str, chars: int, probs: list[str]) -> str:
-    n_img = len(d["images"])
-    imgs = "".join(
-        f"<tr><td><b>{html.escape(i['file'])}</b></td><td>{html.escape(i['kind'])}</td>"
-        f"<td>{html.escape(i['where'])}</td><td>{html.escape(i['copy'])}</td></tr>"
-        for i in d["images"])
-    ok = "문제 없음" if not probs else f"문제 {len(probs)}건"
-    plist = "".join(f"<li>{html.escape(p)}</li>" for p in probs)
-    return f"""<meta charset="utf-8"><title>구해돈 홈판 스탠바이 {d['date']}</title>
-<style>
-body{{font-family:'Malgun Gothic',sans-serif;max-width:900px;margin:0 auto;padding:24px;background:#f6f7f9;color:#16181d}}
-h1{{font-size:20px;margin:0 0 4px}} h2{{font-size:16px;margin:26px 0 10px}}
-.meta{{color:#5b6472;font-size:13px;margin-bottom:16px}}
-.warn{{background:#fff8e6;border:1px solid #f0d98a;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.8;margin-bottom:16px}}
-.bad{{background:#ffecec;border:1px solid #f0a8a8;border-radius:10px;padding:12px 14px;font-size:13px;margin-bottom:16px}}
-button{{border:0;background:#03c75a;color:#fff;padding:10px 20px;border-radius:6px;cursor:pointer;font-size:14px}}
-button.sm{{padding:6px 14px;font-size:13px;background:#2b6cb0}}
-.bar{{display:flex;gap:8px;margin-bottom:10px}}
-pre{{white-space:pre-wrap;word-break:break-all;background:#fff;border:1px solid #e3e6ea;border-radius:10px;padding:16px;margin:0;font-family:inherit;font-size:14px;line-height:1.9}}
-mark{{background:#ffe9a8;padding:1px 3px;border-radius:3px}}
-mark.u{{background:#cfe4ff}} mark.t{{background:#d8f5d8}}
-table{{width:100%;border-collapse:collapse;background:#fff;font-size:13px;border:1px solid #e3e6ea}}
-th,td{{border-bottom:1px solid #eef1f5;padding:9px 12px;text-align:left}} th{{background:#eef1f5}}
-</style>
-<h1>구해돈 · 네이버 홈판 스탠바이</h1>
-<div class="meta">{d['date']} · {html.escape(d['topic'])} · 본문 {chars:,}자 · 사진 {n_img}장 · 검증 {ok}</div>
-{f'<div class="bad"><b>검증 실패</b><ul>{plist}</ul></div>' if probs else ''}
-<div class="warn">
-<b>붙여넣는 순서</b><br>
-1. 제목 복사 → 제목칸<br>
-2. <b>본문 전체 복사</b> → 본문칸 (해시태그까지 한 번에)<br>
-3. 노란 <mark>【N번 사진】</mark> 자리를 지우고 사진 업로드<br>
-4. 파란 <mark class="u">【여기에 허브 URL…】</mark> 자리를 지우고
-   <b>URL만 단독으로 붙여넣고 엔터</b> → 이미지 카드가 뜬다<br>
-5. 초록 <mark class="t">👉 …</mark> 최하단 링크는 <b>이미 본문에 들어있다</b>. 건드리지 않는다<br>
-<br>
-<b>왜 위쪽엔 링크가 없나</b> — 맨 위에 걸면 읽기도 전에 나가서 체류시간이 무너진다.
-중간(카드)과 최하단(텍스트) 두 곳만 노린다.
-</div>
-<h2>제목</h2>
-<div class="bar"><button onclick="cp(this,'t')">제목 복사</button></div>
-<pre id="t">{html.escape(d['title'])}</pre>
-<h2>본문 (해시태그 포함 · 한 번에 복사)</h2>
-<div class="bar"><button onclick="cp(this,'b')">본문 전체 복사</button>
-<button class="sm" onclick="cp(this,'u')">허브 URL 복사</button></div>
-<pre id="b">{html.escape(body)}</pre>
-<div style="display:none" id="u">{html.escape(d['hub'])}</div>
-<h2>사진 {n_img}장</h2>
-<table><tr><th>파일</th><th>종류</th><th>들어가는 자리</th><th>카피</th></tr>{imgs}</table>
-<script>
-const b=document.getElementById('b');
-b.innerHTML=b.innerHTML
- .replace(/【[^】]*번 사진】/g,m=>'<mark>'+m+'</mark>')
- .replace(/【여기에[^】]*】/g,m=>'<mark class="u">'+m+'</mark>')
- .replace(/(👉[^\\n]*\\n[^\\n]*savemoney[^\\n]*)/g,m=>'<mark class="t">'+m+'</mark>');
-function cp(btn,id){{
- navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{{
-  const o=btn.textContent;btn.textContent='복사됨';
-  setTimeout(()=>btn.textContent=o,1500);}});
-}}
-</script>"""
-
 
 def main() -> None:
     src = pathlib.Path(sys.argv[1] if len(sys.argv) > 1
@@ -192,15 +126,13 @@ def main() -> None:
     out = REPO / "output" / (d.get("out_name") or f"{d['date']}_홈판")
     out.mkdir(parents=True, exist_ok=True)
     (out / "0번 본문.txt").write_text(body, encoding="utf-8")
-    (out / "네이버_스탠바이_홈판.html").write_text(
-        render_html(d, body, chars, probs), encoding="utf-8")
 
-    card_at = body.find(URL_SLOT) / len(body) * 100
     link = re.findall(r"https?://\S+", body)
-    text_at = body.find(link[0]) / len(body) * 100 if link else 0
+    card_at = body.find(link[0]) / len(body) * 100 if link else 0
+    text_at = body.rfind(link[-1]) / len(body) * 100 if link else 0
     print(f"본문 {chars:,}자 · 사진 {len(d['images'])}장 · 태그 {TAGS_PER_POST}개")
-    print(f"중간 이미지 카드  {card_at:4.0f}% 지점")
-    print(f"최하단 텍스트 링크 {text_at:4.0f}% 지점")
+    print(f"중간 링크(카드 자리) {card_at:4.0f}% 지점")
+    print(f"최하단 텍스트 링크  {text_at:4.0f}% 지점")
     print("문제 " + (f"{len(probs)}건" if probs else "0건"))
     for p in probs:
         print("  -", p)
