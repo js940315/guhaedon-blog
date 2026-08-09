@@ -490,3 +490,45 @@ A세트 — 이슈                        B세트 — 롱테일
 4. [ ] 발행 3일 뒤 GA 참조 소스에 `blog.naver.com` 이 잡히는지 확인
 5. [ ] 다음 단계 자동화: `wp_lite/_set_YYYYMMDD.py` 를 읽어 `spokes_MMDD.json`
        초안을 자동 생성 (제목 10개만 사람이 확정). **아직 미구현.**
+
+---
+
+## 10. 발행 후 og:image 확인 (2026-08-10 사고 기록)
+
+네이버에 URL 을 붙여넣었더니 카드 이미지가 **워드프레스 사이트 로고**로 떴다.
+원인이 두 겹이었고 둘 다 조용히 실패해서 찾는 데 오래 걸렸다.
+
+**① `rank_math_facebook_image` 가 비어 있었다**
+`publish_full_post` 가 `og_image_url` 로 넘기는 `media_url` 이 빈 문자열이라
+`if og_image_url.strip():` 에서 건너뛴다. 대표이미지는 정상인데 og 만 폴백된다.
+덮어쓰기 경로에는 명시적 패치가 있었고 **신규 경로에만 없었다.**
+→ `set_publisher` 신규 경로에 보정 추가. featured_media 를 되짚어 URL 을 확보한다.
+
+**② Breeze + Cloudways Varnish 캐시가 옛 HTML 을 붙잡고 있었다**
+```
+Cache-Provider  CLOUDWAYS-CACHE-DE
+Cache-Control   s-maxage=2592000     ← 30일
+X-Cache         HIT
+```
+메타만 고치면 `save_post` 훅이 안 돌아 캐시가 안 비워진다.
+쿼리스트링(`?v=2`)을 붙이면 캐시를 비켜가서 정상으로 보이는데,
+**깨끗한 URL 은 계속 옛 HTML 을 뱉는다.** 이것 때문에 처음에 네이버 캐시로 오진했다.
+→ 메타 패치 뒤에 글을 한 번 다시 저장해 퍼지를 발화시킨다.
+
+### 새 소재를 처음 발행하면 반드시 확인한다
+
+```bash
+python - <<'PY'
+import re, requests
+u = "https://savemoney119.com/<슬러그>/"
+h = requests.get(u, headers={"User-Agent":"Mozilla/5.0"}, timeout=40)
+print("X-Cache", h.headers.get("X-Cache"), "Age", h.headers.get("Age"))
+print(re.search(r'og:image"[^>]*content="([^"]*)"', h.text).group(1))
+PY
+```
+
+`X-Cache: MISS` 이고 og:image 가 **로고가 아닌 파일명**이면 정상이다.
+`HIT` 이면서 로고가 나오면 글을 다시 저장해 퍼지시킨다.
+
+> 같은 슬러그를 덮어쓰는 B세트는 이 문제가 잘 안 드러난다.
+> **새 슬러그로 처음 발행할 때만** 터진다.

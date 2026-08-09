@@ -257,6 +257,14 @@ def publish_set(spec, env_path=None, thumb_dir=None, dry_run=False,
                         og_image_url=og_url, og_image_id=mid,
                         og_title=c.get("og_title", ""),
                         og_description=c.get("og_desc", ""))
+                    # 🔴 이 사이트는 Breeze + Cloudways Varnish 2겹 캐시를 쓴다
+                    #   (s-maxage 2592000 = 30일). 위 패치는 **메타만** 건드리므로
+                    #   save_post 훅이 안 돌고 캐시가 그대로 남는다. 그러면 발행 당시
+                    #   HTML 이 계속 나가서 og:image 가 사이트 로고인 채로 굳는다.
+                    #   → 글 자체를 한 번 다시 저장해 퍼지를 발화시킨다.
+                    #   (2026-08-10 실측: 이걸 안 하면 X-Cache HIT 로 옛 HTML 이 나간다)
+                    patch_wordpress_post(site, wp_id, wp_pw, int(res["post_id"]),
+                                         {"status": "publish"})
 
         rm = res.get("rank_math_meta_patch")
         rec = {"key": key, "tier": tier_of[key], "slug": slug, "title": c["title"],
