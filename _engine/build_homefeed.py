@@ -125,7 +125,11 @@ def main() -> None:
     # out_name 을 주면 그 이름으로 나간다. 하루에 홈판 글이 둘 이상일 때 폴더가 겹치지 않게.
     out = REPO / "output" / (d.get("out_name") or f"{d['date']}_홈판")
     out.mkdir(parents=True, exist_ok=True)
-    (out / "0번 본문.txt").write_text(body, encoding="utf-8")
+    # 카카이슬·경제비버와 같은 형식 — **제목이 첫 줄**, 점자 빈칸, 그다음 본문.
+    # 제목을 파일에 안 넣으면 발행할 때 따로 찾아와야 해서 빠뜨리기 쉽다(2026-08-10 피드백).
+    # 자수·링크 검증은 본문만 대상으로 하므로 제목은 여기서만 붙인다.
+    (out / "0번 본문.txt").write_text(
+        "\n".join([d["title"], BR, body]), encoding="utf-8")
 
     link = re.findall(r"https?://\S+", body)
     card_at = body.find(link[0]) / len(body) * 100 if link else 0
