@@ -13,3 +13,8 @@ __pycache__/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# 소싱 임시 폴더
+_logoprobe/
+_tmp_photos/
+output/_*/
