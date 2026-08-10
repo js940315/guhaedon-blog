@@ -122,14 +122,30 @@ def main() -> None:
                                      re.sub(r"https?://\S+", "", body)))
     chars = len(re.sub(r"\s", "", txt))
 
-    # out_name 을 주면 그 이름으로 나간다. 하루에 홈판 글이 둘 이상일 때 폴더가 겹치지 않게.
-    out = REPO / "output" / (d.get("out_name") or f"{d['date']}_홈판")
+    # 경제비버·카카이슬과 같은 폴더 규칙 — output/{날짜}/{순번}/
+    #   A세트(이슈)   1~5
+    #   B세트(롱테일) 6~10
+    # 순번만 보면 뭐가 뭔지 모르므로 날짜 폴더에 0_목록.txt 를 같이 만든다.
+    day = REPO / "output" / str(d["date"])
+    out = day / str(d["seq"])
     out.mkdir(parents=True, exist_ok=True)
     # 카카이슬·경제비버와 같은 형식 — **제목이 첫 줄**, 점자 빈칸, 그다음 본문.
     # 제목을 파일에 안 넣으면 발행할 때 따로 찾아와야 해서 빠뜨리기 쉽다(2026-08-10 피드백).
     # 자수·링크 검증은 본문만 대상으로 하므로 제목은 여기서만 붙인다.
     (out / "0번 본문.txt").write_text(
         "\n".join([d["title"], BR, body]), encoding="utf-8")
+
+    # 날짜 폴더의 목록을 매번 다시 만든다. 형제 폴더의 본문 첫 줄이 곧 제목이다.
+    rows = []
+    for sub in sorted(day.iterdir(), key=lambda x: x.name.zfill(3)):
+        f = sub / "0번 본문.txt"
+        if sub.is_dir() and f.exists():
+            first = f.read_text(encoding="utf-8").split("\n", 1)[0]
+            n_img = len(list(sub.glob("*번 사진.jpg")))
+            rows.append(f"{sub.name:>3}. {first}   [사진 {n_img}장]")
+    (day / "0_목록.txt").write_text(
+        f"{d['date']} 발행 목록\n" + "=" * 62 + "\n" + "\n".join(rows) + "\n",
+        encoding="utf-8")
 
     link = re.findall(r"https?://\S+", body)
     card_at = body.find(link[0]) / len(body) * 100 if link else 0
