@@ -21,7 +21,7 @@
     "   계산기 · 동전 · 영수증 · 열쇠 · 저금통 · 청진기 · 장바구니.",
     "logo_query — 로고 검색어. 생략하면 verify[0] 을 쓴다. 단순 워드마크는 대개 PD 다.",
     "⚠️ 화면·앱·screen 검색어 금지 — 폰 화면에 타 브랜드 로고가 찍혀 나온다 (테무 배경에 Alipay 가 박혀 나온 실측). 로고가 안 찍히는 물건 위주로 검색한다.",
-    "⚠️ coins 검색어는 암호화폐 코인을 불러온다 (2026-08-10 실측). 비트코인 심볼이 박힌 사진이 정부지원금 글에 깔렸다. 검수 몽타주 크기에서는 일반 동전과 구별이 안 되므로 썸네일로 쓸 컷은 반드시 원본 크기로 한 번 더 본다."
+    "⛔ coins · coins in hand · piggy bank 은 쓰지 않는다 (2026-08-10 실측). 근로장려금 소싱에서 받은 8장 중 5장에 비트코인·이더리움·리플이 박혀 있었다. 저금통 사진도 투입구에 비트코인 금화를 꽂아둔 컷이 많다. 220px 몽타주에서는 구별이 안 되고 1080px 로 렌더해야 보인다. 지갑·계산기·달력·영수증으로 간다."
   ],
   "version": 2,
   "topics": {
@@ -141,12 +141,12 @@
       "kind": "제도",
       "season": "5월·9월",
       "thumb": [
-        "coins in cupped hands close up",
-        "piggy bank close up"
+        "wallet in hand close up",
+        "calculator close up"
       ],
       "card": [
-        "piggy bank on table",
-        "coins jar on desk"
+        "calendar page close up",
+        "office desk paperwork"
       ]
     },
     "민생지원금": {
