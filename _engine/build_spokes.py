@@ -24,6 +24,9 @@ import os
 import re
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import keyword_ledger
+
 BRAILLE = "⠀⠀⠀"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -230,8 +233,20 @@ def main():
         json.dump({"date": date, "topic": d["topic"], "posts": report,
                    "cross_problems": xprobs}, f, ensure_ascii=False, indent=1)
 
+    # 세부키워드 장부 — 예전엔 사람이 손으로 적는 구조라 0810·0811 분이 통째로
+    # 빠져 중복 방지가 꺼져 있었다(2026-08-13 실측). 이제 빌드가 끝나면 자동으로
+    # 쌓이고, 이미 쓴 키워드는 아래에서 경고한다.
+    titles = [r["title"] for r in report]
+    dups = keyword_ledger.find_duplicates(ROOT, titles)
+    keyword_ledger.record(ROOT, date, d["topic"], titles, "spoke",
+                          d.get("set_type", ""))
+
     bad = sum(1 for r in report if r["problems"])
     print(f"생성 {len(report)}건 · 문제 {bad}건 · 교차문제 {len(xprobs)}건")
+    if dups:
+        print(f"⚠ 이미 쓴 키워드 {len(dups)}건 — 각도를 바꾸거나 교체하세요:")
+        for k in dups:
+            print(f"     · {k}")
     print(f"→ output/{date}/네이버_스탠바이.html")
     for r in report:
         print(f"  {r['no']:2d}. {'OK ' if not r['problems'] else 'NG '} {r['title']}")

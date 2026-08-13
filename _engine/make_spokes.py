@@ -18,7 +18,7 @@
 각 post 의 `_todo` 필드에 뭘 고쳐야 하는지 적어 둔다. 다 고쳤으면 `_todo` 를 지운다.
 
 ■ 사용법 (저장소 루트에서)
-    python _engine/make_spokes.py ../\_set_20260809.py 0809
+    python _engine/make_spokes.py ../_set_20260809.py 0809
     python _engine/build_spokes.py _engine/spokes_0809.json
 """
 

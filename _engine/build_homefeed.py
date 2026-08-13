@@ -29,6 +29,9 @@ import pathlib
 import re
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import keyword_ledger
+
 REPO = pathlib.Path(__file__).resolve().parent.parent
 BR = "⠀⠀⠀"                      # 점자 빈칸 3개 — 문단 구분
 # 예전에는 여기에 마커를 넣고 사람이 URL 을 직접 입력하게 했다. 그런데 복붙할 때
@@ -147,6 +150,12 @@ def main() -> None:
         f"{d['date']} 발행 목록\n" + "=" * 62 + "\n" + "\n".join(rows) + "\n",
         encoding="utf-8")
 
+    # 세부키워드 장부 — 홈판 트랙도 같은 블로그에 올라가므로 검색 트랙과 한 장부를
+    # 쓴다. 따로 두면 홈판에서 쓴 키워드를 검색 트랙이 또 쓰는 사고가 난다.
+    dups = keyword_ledger.find_duplicates(str(REPO), [d["title"]])
+    keyword_ledger.record(str(REPO), d["date"], d.get("topic", ""),
+                          [d["title"]], "homefeed")
+
     link = re.findall(r"https?://\S+", body)
     card_at = body.find(link[0]) / len(body) * 100 if link else 0
     text_at = body.rfind(link[-1]) / len(body) * 100 if link else 0
@@ -156,6 +165,8 @@ def main() -> None:
     print("문제 " + (f"{len(probs)}건" if probs else "0건"))
     for p in probs:
         print("  -", p)
+    if dups:
+        print(f"⚠ 이미 쓴 키워드입니다 — 각도를 바꾸세요: {d['title']}")
     print(f"\n→ {out}")
 
 
