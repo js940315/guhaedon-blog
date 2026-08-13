@@ -102,29 +102,48 @@ def crop_letterbox(im):
     return im
 
 
-def render_one(src):
-    d = json.loads(open(src, encoding="utf-8").read())
-    th = d.get("thumb")
-    if not th:
-        print(f"  [건너뜀] {os.path.basename(src)} — thumb 설정 없음")
-        return False
+def _svg_for(idx, d):
+    """이미지 한 장의 SVG 를 만든다.
 
-    photo = os.path.join(REPO, "assets", "photos", th["photo"])
-    if not os.path.exists(photo):
-        print(f"  [실패] 배경 사진 없음: {th['photo']}")
-        return False
+    1번은 사진 위에 카피를 얹은 대표 썸네일(thumb 설정),
+    2번부터는 `images[i].card` 설정을 보고 정리 카드나 막대 카드를 그린다.
+    카드도 1080 정사각이라 썸네일과 후처리 경로가 같다.
+    """
+    if idx == 0:
+        th = d.get("thumb")
+        if not th:
+            return None, "thumb 설정 없음"
+        photo = os.path.join(REPO, "assets", "photos", th["photo"])
+        if not os.path.exists(photo):
+            return None, f"배경 사진 없음: {th['photo']}"
+        return cu.build_thumbnail_svg(
+            photo, th["line1"], th["line2"],
+            accent_words=th.get("accent") or None,
+            size=SIZE, dim=th.get("dim", 0.0),
+            logo_path=th.get("logo"),
+        ), th["photo"]
 
-    svg = cu.build_thumbnail_svg(
-        photo, th["line1"], th["line2"],
-        accent_words=th.get("accent") or None,
-        size=SIZE, dim=th.get("dim", 0.0),
-        logo_path=th.get("logo"),
-    )
+    card = (d["images"][idx] or {}).get("card")
+    if not card:
+        return None, "card 설정 없음"
 
-    outdir = os.path.join(REPO, "output", str(d["date"]), str(d["seq"]))
-    os.makedirs(outdir, exist_ok=True)
-    dst = os.path.join(outdir, "1번 사진.jpg")
+    kind = card.get("type", "summary")
+    if kind == "summary":
+        return cu.build_summary_card_svg(
+            card["eyebrow"], card["title_lines"], card["points"],
+            note=card.get("note", ""),
+        ), "정리 카드"
+    if kind == "bar":
+        return cu.build_bar_card_svg(
+            card["eyebrow"], card["title_lines"],
+            card["categories"], card["values"],
+            displays=card.get("displays"),
+            note=card.get("note", ""),
+        ), "막대 카드"
+    return None, f"모르는 카드 종류: {kind}"
 
+
+def _rasterize(svg, dst):
     tmpdir = tempfile.mkdtemp()
     svg_path = os.path.join(tmpdir, "t.svg")
     png_path = os.path.join(tmpdir, "t.png")
@@ -132,20 +151,43 @@ def render_one(src):
         with open(svg_path, "w", encoding="utf-8") as f:
             f.write(svg)
         if not cu.convert_svg_to_png(svg_path, png_path):
-            print(f"  [실패] 렌더 실패: {os.path.basename(src)}")
             return False
         im = crop_letterbox(Image.open(png_path).convert("RGB"))
         if im.size != (SIZE, SIZE):
             im = im.resize((SIZE, SIZE), Image.LANCZOS)
         im.save(dst, "JPEG", quality=92, subsampling=1)
+        return True
     finally:
         for p in (svg_path, png_path):
             if os.path.exists(p):
                 os.remove(p)
         os.rmdir(tmpdir)
 
-    print(f"  [완료] {d['date']}/{d['seq']}/1번 사진.jpg  ← {th['photo']}")
-    return True
+
+def render_one(src):
+    d = json.loads(open(src, encoding="utf-8").read())
+    imgs = d.get("images") or []
+    if not imgs:
+        print(f"  [건너뜀] {os.path.basename(src)} — images 없음")
+        return False
+
+    outdir = os.path.join(REPO, "output", str(d["date"]), str(d["seq"]))
+    os.makedirs(outdir, exist_ok=True)
+
+    made = 0
+    for i in range(len(imgs)):
+        svg, label = _svg_for(i, d)
+        if svg is None:
+            print(f"  [실패] {d['seq']}/{i+1}번 — {label}")
+            continue
+        dst = os.path.join(outdir, f"{i+1}번 사진.jpg")
+        if _rasterize(svg, dst):
+            made += 1
+            print(f"  [완료] {d['date']}/{d['seq']}/{i+1}번 사진.jpg  ← {label}")
+        else:
+            print(f"  [실패] {d['seq']}/{i+1}번 — 렌더 실패")
+
+    return made == len(imgs)
 
 
 def rewrite_index(date):
