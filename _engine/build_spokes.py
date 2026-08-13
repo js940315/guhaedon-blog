@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """build_spokes.py — 네이버 스포크 10건 '복붙 스탠바이' 빌더
 
 원본 규약: github.com/js940315/economy-blog `_engine/build_posts.py`
@@ -237,7 +237,7 @@ def main():
     # 빠져 중복 방지가 꺼져 있었다(2026-08-13 실측). 이제 빌드가 끝나면 자동으로
     # 쌓이고, 이미 쓴 키워드는 아래에서 경고한다.
     titles = [r["title"] for r in report]
-    dups = keyword_ledger.find_duplicates(ROOT, titles)
+    dups = keyword_ledger.find_duplicates(ROOT, titles, exclude_date=date)
     keyword_ledger.record(ROOT, date, d["topic"], titles, "spoke",
                           d.get("set_type", ""))
 

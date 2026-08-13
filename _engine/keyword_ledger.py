@@ -49,9 +49,18 @@ def all_keywords(root):
     return out
 
 
-def find_duplicates(root, keywords):
-    """이번에 쓰려는 키워드 중 이미 장부에 있는 것을 돌려준다."""
-    seen = set(all_keywords(root))
+def find_duplicates(root, keywords, exclude_date=None):
+    """이번에 쓰려는 키워드 중 이미 장부에 있는 것을 돌려준다.
+
+    exclude_date 를 주면 그 날짜 기록은 빼고 본다. 안 그러면 같은 글을 다시
+    빌드할 때 직전 실행이 적어둔 자기 자신을 중복으로 잡는다. 빌더는 위반이
+    0이 될 때까지 여러 번 돌리는 게 정상이라 이 오탐이 매번 뜬다.
+    """
+    seen = set()
+    for date, day in load(root).items():
+        if exclude_date is not None and date == exclude_date:
+            continue
+        seen.update(day.get("keywords", []))
     return [k for k in keywords if k in seen]
 
 
@@ -121,6 +130,10 @@ if __name__ == "__main__":
         assert load(tmpdir)["0101"]["set_type"] == "B"   # 빈 값으로 안 지워진다
 
         assert find_duplicates(tmpdir, ["나", "라"]) == ["나"]
+        # 재빌드 오탐 방지 — 같은 날짜 기록은 빼고 본다
+        assert find_duplicates(tmpdir, ["나"], exclude_date="0101") == []
+        record(tmpdir, "0102", "다른날", ["나"], "spoke")
+        assert find_duplicates(tmpdir, ["나"], exclude_date="0101") == ["나"]
         assert record(tmpdir, "0102", "x", [], "spoke") is None   # 빈 입력은 무시
 
         print("keyword_ledger 자체 테스트 통과")

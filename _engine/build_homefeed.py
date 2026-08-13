@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """홈판 트랙 빌더 — 네이버 복붙용 스탠바이를 만든다.
 
 검색 트랙(build_spokes.py)과 규격이 다르다.
@@ -152,7 +152,7 @@ def main() -> None:
 
     # 세부키워드 장부 — 홈판 트랙도 같은 블로그에 올라가므로 검색 트랙과 한 장부를
     # 쓴다. 따로 두면 홈판에서 쓴 키워드를 검색 트랙이 또 쓰는 사고가 난다.
-    dups = keyword_ledger.find_duplicates(str(REPO), [d["title"]])
+    dups = keyword_ledger.find_duplicates(str(REPO), [d["title"]], exclude_date=d["date"])
     keyword_ledger.record(str(REPO), d["date"], d.get("topic", ""),
                           [d["title"]], "homefeed")
 
