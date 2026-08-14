@@ -44,9 +44,17 @@ def _get(url):
 
 
 def _clean(s):
-    """워드프레스가 돌려주는 HTML 조각을 평문으로."""
-    s = re.sub(r"<[^>]+>", "", s or "")
-    return html_mod.unescape(s).strip()
+    """워드프레스가 돌려주는 HTML 조각을 평문으로.
+
+    ⚠️ 태그만 지우면 안 된다. 허브 글은 본문 맨 앞에 <style> 블록이 통째로
+    들어 있어서, 태그만 벗기면 CSS 가 본문인 것처럼 딸려온다(2026-08-14 실측).
+    style·script 는 내용까지 통째로 걷어낸다.
+    """
+    s = s or ""
+    s = re.sub(r"<(style|script)[^>]*>.*?</\1>", " ", s, flags=re.S | re.I)
+    s = re.sub(r"<[^>]+>", " ", s)
+    s = html_mod.unescape(s)
+    return re.sub(r"[ \t]{2,}", " ", s).strip()
 
 
 def fetch_posts(n=10):
